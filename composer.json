@@ -16,15 +16,24 @@
         }
     ],
     "require": {
-        "php": "^7.1"
+        "php": "^7.1",
+        "composer/composer": "^1.8",
+        "guzzlehttp/guzzle": "^6.3",
+        "symfony/css-selector": "^4.2",
+        "symfony/dom-crawler": "^4.2"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.0"
+        "mockery/mockery": "^1.2",
+        "phpunit/phpunit": "^7.0",
+        "symfony/var-dumper": "^4.2"
     },
     "autoload": {
         "psr-4": {
             "Dominikb\\ComposerLicenseChecker\\": "src"
-        }
+        },
+        "files": [
+            "src/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
