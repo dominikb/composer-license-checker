@@ -1,11 +1,11 @@
-# Very short description of the package
+# Composer License Checker
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/dominikb/composer-license-checker.svg?style=flat-square)](https://packagist.org/packages/dominikb/composer-license-checker)
 [![Build Status](https://img.shields.io/travis/dominikb/composer-license-checker/master.svg?style=flat-square)](https://travis-ci.org/dominikb/composer-license-checker)
 [![Quality Score](https://img.shields.io/scrutinizer/g/dominikb/composer-license-checker.svg?style=flat-square)](https://scrutinizer-ci.com/g/dominikb/composer-license-checker)
 [![Total Downloads](https://img.shields.io/packagist/dt/dominikb/composer-license-checker.svg?style=flat-square)](https://packagist.org/packages/dominikb/composer-license-checker)
 
-This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what PSRs you support to avoid any confusion with users and contributors.
+Crawl through your dependencies and look up their licenses on [https://tldrlegal.com/](https://tldrlegal.com/) for a quick summary on whats allowed with each license and how the support may be used.
 
 ## Installation
 
@@ -17,8 +17,10 @@ composer require dominikb/composer-license-checker
 
 ## Usage
 
-``` php
-// Usage description here
+> This package is in an early phase, options for interaction will be available soon.
+
+``` bash
+vendor/bin/composer-license-checker
 ```
 
 ### Testing
@@ -41,13 +43,9 @@ If you discover any security related issues, please email bauernfeind.dominik@gm
 
 ## Credits
 
-- [dominik](https://github.com/dominikb)
+- [Dominik Bauernfeind](https://github.com/dominikb)
 - [All Contributors](../../contributors)
 
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-
-## PHP Package Boilerplate
-
-This package was generated using the [PHP Package Boilerplate](https://laravelpackageboilerplate.com).
