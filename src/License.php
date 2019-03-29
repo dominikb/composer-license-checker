@@ -5,6 +5,7 @@ namespace Dominikb\ComposerLicenseChecker;
 
 
 use DateTimeInterface;
+use Serializable;
 
 class License
 {

@@ -2,12 +2,10 @@
 
 namespace Dominikb\ComposerLicenseChecker;
 
-use DateTimeImmutable;
-use GuzzleHttp\Client;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\DomCrawler\Crawler;
+use Dominikb\ComposerLicenseChecker\Contracts\LicenseLookup;
 
 class ComposerLicenseChecker
 {
@@ -17,11 +15,14 @@ class ComposerLicenseChecker
     protected $composerPath;
     /** @var OutputInterface */
     protected $output;
+    /** @var Contracts\LicenseLookup */
+    protected $licenseLookup;
 
-    public function __construct(string $composerPath, OutputInterface $output = null)
+    public function __construct(string $composerPath, LicenseLookup $licenseLookup, OutputInterface $output = null)
     {
         $this->composerPath = $composerPath;
         $this->output = $output ?? new ConsoleOutput;
+        $this->licenseLookup = $licenseLookup;
     }
 
     public function check(string $path)
@@ -81,8 +82,6 @@ class ComposerLicenseChecker
             }
             $licenseTable->render();
         }
-
-        die;
     }
 
     private function filterHeaderOutput(array $output): array
@@ -129,71 +128,9 @@ class ComposerLicenseChecker
     {
         $lookedUp = [];
         foreach ($licenses as $license) {
-            $lookedUp[$license] = $this->searchForLicenseInformation($license);
+            $lookedUp[$license] = $this->licenseLookup->lookUp($license);
         }
 
         return $lookedUp;
-    }
-
-    private function searchForLicenseInformation($license)
-    {
-        $baseUrl = "https://tldrlegal.com";
-        $url = "$baseUrl/search?q=$license";
-
-        $client = new Client;
-
-        $res = $client->get($url);
-
-        $crawler = new Crawler($res->getBody()->getContents());
-
-        $element = $crawler->filter('div#licenses > .search-result > a')->first();
-
-        $link = $element->attr('href');
-
-        $licenceUrl = "$baseUrl$link";
-
-        $res = $client->get($licenceUrl);
-
-        $html = $res->getBody()->getContents();
-
-        return (new License)
-            ->setShortName($license)
-            ->setCan($this->extractCans($html))
-            ->setCannot($this->extractCannots($html))
-            ->setMust($this->extractMusts($html))
-            ->setSource($licenceUrl)
-            ->setCreatedAt(new DateTimeImmutable);
-    }
-
-    private function extractCans($html)
-    {
-        return $this->extractListByColor($html, 'green');
-    }
-
-    private function extractCannots($html)
-    {
-        return $this->extractListByColor($html, 'red');
-    }
-
-    private function extractMusts($html)
-    {
-        return $this->extractListByColor($html, 'blue');
-    }
-
-    private function extractListByColor($html, $color)
-    {
-        $crawler = new Crawler($html);
-
-        $headings = $crawler->filter(".bucket-list.$color li div.attr-head")
-            ->each(function (Crawler $crawler) {
-                return $crawler->getNode(0)->textContent;
-            });
-
-        $bodies = $crawler->filter(".bucket-list.$color li div.attr-body")
-            ->each(function (Crawler $crawler) {
-                return $crawler->getNode(0)->textContent;
-            });
-
-        return array_combine($headings, $bodies);
     }
 }

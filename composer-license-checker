@@ -2,9 +2,15 @@
 <?php declare(strict_types = 1);
 
 use Dominikb\ComposerLicenseChecker\ComposerLicenseChecker;
+use Dominikb\ComposerLicenseChecker\LicenseLookup;
+use GuzzleHttp\Client;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-$checker = new ComposerLicenseChecker(realpath('./vendor/bin/composer'));
+$httpClient = new Client();
+
+$licenceLookUp = new LicenseLookup($httpClient);
+
+$checker = new ComposerLicenseChecker(realpath('./vendor/bin/composer'), $licenceLookUp);
 
 $checker->check(realpath('.'));
