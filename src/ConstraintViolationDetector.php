@@ -1,11 +1,11 @@
-<?php declare(strict_types = 1);
+<?php
 
+declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker;
 
-
-use Dominikb\ComposerLicenseChecker\Contracts\LicenseConstraintHandler;
 use Dominikb\ComposerLicenseChecker\Exceptions\LogicException;
+use Dominikb\ComposerLicenseChecker\Contracts\LicenseConstraintHandler;
 
 class ConstraintViolationDetector implements LicenseConstraintHandler
 {
@@ -37,7 +37,7 @@ class ConstraintViolationDetector implements LicenseConstraintHandler
 
         return [
             $this->detectBlacklistViolation($dependencies),
-            $this->detectWhitelistViolation($dependencies)
+            $this->detectWhitelistViolation($dependencies),
         ];
     }
 
@@ -59,10 +59,10 @@ class ConstraintViolationDetector implements LicenseConstraintHandler
      */
     private function detectBlacklistViolation(array $dependencies): ConstraintViolation
     {
-        $violation = new ConstraintViolation("Blacklisted license found!");
+        $violation = new ConstraintViolation('Blacklisted license found!');
 
         if (! empty($this->blacklist)) {
-            foreach($dependencies as $dependency) {
+            foreach ($dependencies as $dependency) {
                 if (in_array($dependency->getLicense(), $this->blacklist)) {
                     $violation->add($dependency);
                 }
@@ -77,10 +77,10 @@ class ConstraintViolationDetector implements LicenseConstraintHandler
      */
     private function detectWhitelistViolation(array $dependencies): ConstraintViolation
     {
-        $violation = new ConstraintViolation("Non white-listed license found!");
+        $violation = new ConstraintViolation('Non white-listed license found!');
 
         if (! empty($this->whitelist)) {
-            foreach($dependencies as $dependency) {
+            foreach ($dependencies as $dependency) {
                 if (! in_array($dependency->getLicense(), $this->whitelist)) {
                     $violation->add($dependency);
                 }
