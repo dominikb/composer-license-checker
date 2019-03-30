@@ -2,32 +2,42 @@
 
 namespace Dominikb\ComposerLicenseChecker;
 
+use GuzzleHttp\Client;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Input\Input;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 use Dominikb\ComposerLicenseChecker\Contracts\LicenseLookup;
 
-class ComposerLicenseChecker
+class ComposerLicenseCheckCommand extends Command
 {
     const LINES_BEFORE_DEPENDENCY_VERSIONS = 2;
 
-    /** @var string */
-    protected $composerPath;
     /** @var OutputInterface */
     protected $output;
+
     /** @var Contracts\LicenseLookup */
     protected $licenseLookup;
 
-    public function __construct(string $composerPath, LicenseLookup $licenseLookup, OutputInterface $output = null)
-    {
-        $this->composerPath = $composerPath;
-        $this->output = $output ?? new ConsoleOutput;
-        $this->licenseLookup = $licenseLookup;
-    }
+    /** @var InputInterface */
+    protected $input;
 
-    public function check(string $path)
+    public function execute(InputInterface $input, OutputInterface $output, LicenseLookup $licenseLookup = null)
     {
-        exec("$this->composerPath -d $path licenses", $output);
+        $this->input = $input;
+        $this->output = $output;
+        $this->licenseLookup = new \Dominikb\ComposerLicenseChecker\LicenseLookup(new Client());
+
+        $composer = $input->getOption('composer') ?? realpath('./vendor/bin/composer');
+
+        $path = $this->input->getOption('directory') ?? realpath('./');
+
+        $command = sprintf('%s -d %s licenses', $composer, $path);
+
+        exec($command, $output);
 
         $filteredOutput = $this->filterHeaderOutput($output);
 

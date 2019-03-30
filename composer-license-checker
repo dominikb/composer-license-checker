@@ -1,16 +1,55 @@
 #!/usr/bin/env php
 <?php declare(strict_types = 1);
 
-use Dominikb\ComposerLicenseChecker\ComposerLicenseChecker;
+use Dominikb\ComposerLicenseChecker\ComposerLicenseCheckCommand;
 use Dominikb\ComposerLicenseChecker\LicenseLookup;
 use GuzzleHttp\Client;
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputDefinition;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-$httpClient = new Client();
+
+$output = new ConsoleOutput();
+
+$httpClient = new Client;
 
 $licenceLookUp = new LicenseLookup($httpClient);
 
-$checker = new ComposerLicenseChecker(realpath('./vendor/bin/composer'), $licenceLookUp);
+$checkCommand = new ComposerLicenseCheckCommand('check');
+$checkCommand->setDefinition(new InputDefinition([
+    new InputOption(
+        'directory',
+        'd',
+        InputOption::VALUE_OPTIONAL,
+        'Path to directory of composer.json file'
+    ),
+    new InputOption(
+        'composer',
+        'c',
+        InputOption::VALUE_OPTIONAL,
+        'Path to composer executable.'
+    ),
+    new InputOption(
+        'whitelist',
+        'w',
+        InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
+        'Set a list of licenses you want to permit for usage.'
+    ),
+    new InputOption(
+        'blacklist',
+        'b',
+        InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
+        'Set a list of licenses you want to forbid for usage.'
+    )
+]));
 
-$checker->check(realpath('.'));
+(new Application('composer-license-checker','1.0.0'))
+    ->add($checkCommand)
+    ->getApplication()
+    ->setDefaultCommand('check', true)
+    ->run();
