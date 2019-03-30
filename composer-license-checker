@@ -1,8 +1,10 @@
 #!/usr/bin/env php
 <?php declare(strict_types = 1);
 
-use Dominikb\ComposerLicenseChecker\ComposerLicenseCheckCommand;
+use Dominikb\ComposerLicenseChecker\CheckCommand;
+use Dominikb\ComposerLicenseChecker\ConstraintViolationDetector;
 use Dominikb\ComposerLicenseChecker\LicenseLookup;
+use Dominikb\ComposerLicenseChecker\ReportCommand;
 use GuzzleHttp\Client;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
@@ -20,11 +22,13 @@ $httpClient = new Client;
 
 $licenceLookUp = new LicenseLookup($httpClient);
 
-$checkCommand = new ComposerLicenseCheckCommand('check');
+$checkCommand = new CheckCommand('check');
+$checkCommand->setLicenseLookup($licenceLookUp);
+$checkCommand->setLicenseConstraintHandler(new ConstraintViolationDetector);
 $checkCommand->setDefinition(new InputDefinition([
     new InputOption(
-        'directory',
-        'd',
+        'project-path',
+        'p',
         InputOption::VALUE_OPTIONAL,
         'Path to directory of composer.json file'
     ),
@@ -32,24 +36,41 @@ $checkCommand->setDefinition(new InputDefinition([
         'composer',
         'c',
         InputOption::VALUE_OPTIONAL,
-        'Path to composer executable.'
+        'Path to composer executable'
     ),
     new InputOption(
         'whitelist',
         'w',
         InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-        'Set a list of licenses you want to permit for usage.'
+        'Set a list of licenses you want to permit for usage'
     ),
     new InputOption(
         'blacklist',
         'b',
         InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-        'Set a list of licenses you want to forbid for usage.'
+        'Set a list of licenses you want to forbid for usage'
     )
 ]));
 
-(new Application('composer-license-checker','1.0.0'))
-    ->add($checkCommand)
-    ->getApplication()
-    ->setDefaultCommand('check', true)
-    ->run();
+$reportCommand = new ReportCommand('report');
+$reportCommand->setLicenseLookup($licenceLookUp);
+$reportCommand->setDefinition(new InputDefinition([
+    new InputOption(
+        'project-path',
+        'p',
+        InputOption::VALUE_OPTIONAL,
+        'Path to directory of composer.json file'
+    ),
+    new InputOption(
+        'composer',
+        'c',
+        InputOption::VALUE_OPTIONAL,
+        'Path to composer executable'
+    )
+]));
+
+$application = new Application('composer-license-checker', '1.0.0');
+
+$application->addCommands([$checkCommand, $reportCommand]);
+
+$application->run();

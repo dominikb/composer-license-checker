@@ -8,5 +8,5 @@ use Dominikb\ComposerLicenseChecker\License;
 
 interface LicenseLookup
 {
-    public function lookUp(string $licenseShortName): License;
+    public function lookUp(string $license): License;
 }

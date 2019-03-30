@@ -7,6 +7,7 @@ namespace Dominikb\ComposerLicenseChecker;
 use DateTimeImmutable;
 use Dominikb\ComposerLicenseChecker\Contracts\LicenseLookup as LicenseLookupContract;
 use GuzzleHttp\ClientInterface;
+use InvalidArgumentException;
 use Psr\SimpleCache\CacheInterface;
 use Symfony\Component\Cache\Simple\FilesystemCache;
 use Symfony\Component\DomCrawler\Crawler;
@@ -26,17 +27,21 @@ class LicenseLookup implements LicenseLookupContract
         $this->cache = $cache ?? new FilesystemCache('LicenseLookup', 3600, __DIR__ . '/../.cache');
     }
 
-    public function lookUp(string $licenseShortName): License
+    public function lookUp(string $license): License
     {
-        if ($cached = $this->cache->get($licenseShortName)) {
+        if ($cached = $this->cache->get($license)) {
             return $cached;
         }
 
-        $detailsPageUrl = $this->queryForDetailPageUrl($licenseShortName);
+        try {
+            $detailsPageUrl = $this->queryForDetailPageUrl($license);
 
-        $license = $this->resolveLicenseInformation($licenseShortName, $detailsPageUrl);
+            $license = $this->resolveLicenseInformation($license, $detailsPageUrl);
+        } catch (InvalidArgumentException $exception) {
+            $license = new NullLicense;
+        }
 
-        $this->cache->set($licenseShortName, $license);
+        $this->cache->set($license, $license);
 
         return $license;
     }
@@ -110,5 +115,4 @@ class LicenseLookup implements LicenseLookupContract
 
         return array_combine($headings, $bodies);
     }
-
 }
