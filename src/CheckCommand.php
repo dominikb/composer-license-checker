@@ -2,16 +2,16 @@
 
 namespace Dominikb\ComposerLicenseChecker;
 
-use Dominikb\ComposerLicenseChecker\Contracts\LicenseConstraintAware;
-use Dominikb\ComposerLicenseChecker\Contracts\LicenseLookupAware;
-use Dominikb\ComposerLicenseChecker\Exceptions\CommandExecutionException;
-use Dominikb\ComposerLicenseChecker\Exceptions\ParsingException;
-use Dominikb\ComposerLicenseChecker\Traits\LicenseConstraintAwareTrait;
-use Dominikb\ComposerLicenseChecker\Traits\LicenseLookupAwareTrait;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Logger\ConsoleLogger;
 use Symfony\Component\Console\Output\OutputInterface;
+use Dominikb\ComposerLicenseChecker\Exceptions\ParsingException;
+use Dominikb\ComposerLicenseChecker\Contracts\LicenseLookupAware;
+use Dominikb\ComposerLicenseChecker\Traits\LicenseLookupAwareTrait;
+use Dominikb\ComposerLicenseChecker\Contracts\LicenseConstraintAware;
+use Dominikb\ComposerLicenseChecker\Traits\LicenseConstraintAwareTrait;
+use Dominikb\ComposerLicenseChecker\Exceptions\CommandExecutionException;
 
 class CheckCommand extends Command implements LicenseLookupAware, LicenseConstraintAware
 {
@@ -82,7 +82,7 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
     private function stripHeadersFromOutput(array $output): array
     {
         for ($i = 0; $i < count($output); $i++) {
-            if ($output[$i] === "") {
+            if ($output[$i] === '') {
                 return array_slice($output, $i + self::LINES_BEFORE_DEPENDENCY_VERSIONS);
             }
         }
@@ -94,13 +94,12 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
     {
         $mappedToObjects = [];
         foreach ($output as $dependency) {
-            $normalized = preg_replace("/\\s+/", " ", $dependency);
-            $columns = explode(" ", $normalized);
+            $normalized = preg_replace('/\\s+/', ' ', $dependency);
+            $columns = explode(' ', $normalized);
             $mappedToObjects[] = (new Dependency)
                 ->setName($columns[0])
                 ->setVersion($columns[1])
-                ->setLicense($columns[2])
-            ;
+                ->setLicense($columns[2]);
         }
 
         return $mappedToObjects;
@@ -119,7 +118,7 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
      */
     private function handleViolations(array $violations): void
     {
-        foreach($violations as $violation) {
+        foreach ($violations as $violation) {
             if ($violation->hasViolators()) {
                 $this->logger->error($violation->getTitle());
                 $this->reportViolators($violation->getViolators());
@@ -139,15 +138,15 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
     private function reportViolators(array $violators): void
     {
         $byLicense = [];
-        foreach($violators as $violator) {
+        foreach ($violators as $violator) {
             if (! isset($byLicense[$violator->getLicense()])) {
                 $byLicense[$violator->getLicense()] = [];
             }
             $byLicense[$violator->getLicense()][] = $violator;
         }
 
-        foreach($byLicense as $license => $violators) {
-            $violatorNames = array_map(function(Dependency $dependency) {
+        foreach ($byLicense as $license => $violators) {
+            $violatorNames = array_map(function (Dependency $dependency) {
                 return sprintf('"%s"', $dependency->getName());
             }, $violators);
 

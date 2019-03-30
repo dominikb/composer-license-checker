@@ -1,7 +1,8 @@
-<?php declare(strict_types = 1);
+<?php
 
-require_once __DIR__ . '/../vendor/autoload.php';
+declare(strict_types=1);
 
+require_once __DIR__.'/../vendor/autoload.php';
 
 if (! function_exists('array_map_keys')) {
     /**
@@ -10,10 +11,11 @@ if (! function_exists('array_map_keys')) {
      *
      * @return array
      */
-    function array_map_keys($input, $callback) {
+    function array_map_keys($input, $callback)
+    {
         $output = [];
 
-        foreach($input as $key => $value) {
+        foreach ($input as $key => $value) {
             $output[] = $callback($key, $value);
         }
 

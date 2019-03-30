@@ -1,11 +1,10 @@
-<?php declare(strict_types = 1);
+<?php
 
+declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker;
 
-
 use DateTimeInterface;
-use Serializable;
 
 class License
 {
@@ -35,7 +34,7 @@ class License
      *
      * @return License
      */
-    public function setShortName(string $shortName): License
+    public function setShortName(string $shortName): self
     {
         $this->shortName = $shortName;
 
@@ -55,7 +54,7 @@ class License
      *
      * @return License
      */
-    public function setCan(array $can): License
+    public function setCan(array $can): self
     {
         $this->can = $can;
 
@@ -75,7 +74,7 @@ class License
      *
      * @return License
      */
-    public function setCannot(array $cannot): License
+    public function setCannot(array $cannot): self
     {
         $this->cannot = $cannot;
 
@@ -95,7 +94,7 @@ class License
      *
      * @return License
      */
-    public function setMust(array $must): License
+    public function setMust(array $must): self
     {
         $this->must = $must;
 
@@ -115,7 +114,7 @@ class License
      *
      * @return License
      */
-    public function setSource(string $source): License
+    public function setSource(string $source): self
     {
         $this->source = $source;
 
@@ -135,11 +134,10 @@ class License
      *
      * @return License
      */
-    public function setCreatedAt(DateTimeInterface $createdAt): License
+    public function setCreatedAt(DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
-
 }

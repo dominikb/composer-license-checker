@@ -1,16 +1,16 @@
-<?php declare(strict_types = 1);
+<?php
 
+declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker;
 
-
-use Dominikb\ComposerLicenseChecker\Contracts\LicenseLookupAware;
-use Dominikb\ComposerLicenseChecker\Exceptions\ParsingException;
-use Dominikb\ComposerLicenseChecker\Traits\LicenseLookupAwareTrait;
-use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Dominikb\ComposerLicenseChecker\Exceptions\ParsingException;
+use Dominikb\ComposerLicenseChecker\Contracts\LicenseLookupAware;
+use Dominikb\ComposerLicenseChecker\Traits\LicenseLookupAwareTrait;
 
 class ReportCommand extends Command implements LicenseLookupAware
 {
@@ -26,10 +26,9 @@ class ReportCommand extends Command implements LicenseLookupAware
 
         $licenses = $this->lookUpLicenses(array_keys($groupedByLicense));
 
-
         /** @var License $license */
         foreach ($licenses as $license) {
-            $usageCount= count($groupedByLicense[$license->getShortName()]);
+            $usageCount = count($groupedByLicense[$license->getShortName()]);
             $headline = sprintf("\nCount %d - %s (%s)", $usageCount, $license->getShortName(), $license->getSource());
             $output->writeln($headline);
             $licenseTable = new Table($output);
@@ -45,7 +44,7 @@ class ReportCommand extends Command implements LicenseLookupAware
             $must = array_pad($must, $columnWidth, null);
 
             $inlineHeading = function ($key) {
-                return is_string($key) ? $key : "";
+                return is_string($key) ? $key : '';
             };
 
             $can = array_map_keys($can, $inlineHeading);
@@ -96,7 +95,7 @@ class ReportCommand extends Command implements LicenseLookupAware
     private function stripHeadersFromOutput(array $output): array
     {
         for ($i = 0; $i < count($output); $i++) {
-            if ($output[$i] === "") {
+            if ($output[$i] === '') {
                 return array_slice($output, $i + self::LINES_BEFORE_DEPENDENCY_VERSIONS);
             }
         }
@@ -108,16 +107,15 @@ class ReportCommand extends Command implements LicenseLookupAware
     {
         $mappedToObjects = [];
         foreach ($output as $dependency) {
-            $normalized = preg_replace("/\\s+/", " ", $dependency);
-            $normalized = preg_replace("(\(|\))", "", $normalized);
-            $normalized = preg_replace("/ or /", ", ", $normalized);
-            $normalized = preg_replace("/, /", " ", $normalized);
-            $columns = explode(" ", $normalized);
+            $normalized = preg_replace('/\\s+/', ' ', $dependency);
+            $normalized = preg_replace("(\(|\))", '', $normalized);
+            $normalized = preg_replace('/ or /', ', ', $normalized);
+            $normalized = preg_replace('/, /', ' ', $normalized);
+            $columns = explode(' ', $normalized);
             $mappedToObjects[] = (new Dependency)
                 ->setName($columns[0])
                 ->setVersion($columns[1])
-                ->setLicense($columns[2])
-            ;
+                ->setLicense($columns[2]);
         }
 
         return $mappedToObjects;
@@ -128,7 +126,7 @@ class ReportCommand extends Command implements LicenseLookupAware
         $grouped = [];
 
         foreach ($dependencies as $dependency) {
-            if ( ! isset($grouped[$license = $dependency->getLicense()])) {
+            if (! isset($grouped[$license = $dependency->getLicense()])) {
                 $grouped[$license] = [];
             }
             $grouped[$license][] = $dependency;
@@ -146,5 +144,4 @@ class ReportCommand extends Command implements LicenseLookupAware
 
         return $lookedUp;
     }
-
 }

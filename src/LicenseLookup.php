@@ -1,16 +1,16 @@
-<?php declare(strict_types = 1);
+<?php
 
+declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker;
 
-
 use DateTimeImmutable;
-use Dominikb\ComposerLicenseChecker\Contracts\LicenseLookup as LicenseLookupContract;
-use GuzzleHttp\ClientInterface;
 use InvalidArgumentException;
+use GuzzleHttp\ClientInterface;
 use Psr\SimpleCache\CacheInterface;
-use Symfony\Component\Cache\Simple\FilesystemCache;
 use Symfony\Component\DomCrawler\Crawler;
+use Symfony\Component\Cache\Simple\FilesystemCache;
+use Dominikb\ComposerLicenseChecker\Contracts\LicenseLookup as LicenseLookupContract;
 
 class LicenseLookup implements LicenseLookupContract
 {
@@ -24,7 +24,7 @@ class LicenseLookup implements LicenseLookupContract
     public function __construct(ClientInterface $http, CacheInterface $cache = null)
     {
         $this->http = $http;
-        $this->cache = $cache ?? new FilesystemCache('LicenseLookup', 3600, __DIR__ . '/../.cache');
+        $this->cache = $cache ?? new FilesystemCache('LicenseLookup', 3600, __DIR__.'/../.cache');
     }
 
     public function lookUp(string $license): License
@@ -57,10 +57,9 @@ class LicenseLookup implements LicenseLookupContract
         $relativeUrl = $crawler
             ->filter('div#licenses > .search-result > a')
             ->first()
-            ->attr('href')
-            ;
+            ->attr('href');
 
-        return static::API_HOST . $relativeUrl;
+        return static::API_HOST.$relativeUrl;
     }
 
     private function makeCrawler(string $html): Crawler

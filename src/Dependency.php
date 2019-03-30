@@ -1,8 +1,8 @@
-<?php declare(strict_types = 1);
+<?php
 
+declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker;
-
 
 class Dependency
 {
@@ -28,7 +28,7 @@ class Dependency
      *
      * @return Dependency
      */
-    public function setName(string $name): Dependency
+    public function setName(string $name): self
     {
         $this->name = $name;
 
@@ -48,7 +48,7 @@ class Dependency
      *
      * @return Dependency
      */
-    public function setVersion(string $version): Dependency
+    public function setVersion(string $version): self
     {
         $this->version = $version;
 
@@ -68,7 +68,7 @@ class Dependency
      *
      * @return Dependency
      */
-    public function setLicense(string $license): Dependency
+    public function setLicense(string $license): self
     {
         $this->license = $license;
 
