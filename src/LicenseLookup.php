@@ -27,21 +27,21 @@ class LicenseLookup implements LicenseLookupContract
         $this->cache = $cache ?? new FilesystemCache('LicenseLookup', 3600, __DIR__.'/../.cache');
     }
 
-    public function lookUp(string $license): License
+    public function lookUp(string $licenseName): License
     {
-        if ($cached = $this->cache->get($license)) {
+        if ($cached = $this->cache->get($licenseName)) {
             return $cached;
         }
 
         try {
-            $detailsPageUrl = $this->queryForDetailPageUrl($license);
+            $detailsPageUrl = $this->queryForDetailPageUrl($licenseName);
 
-            $license = $this->resolveLicenseInformation($license, $detailsPageUrl);
+            $license = $this->resolveLicenseInformation($licenseName, $detailsPageUrl);
         } catch (InvalidArgumentException $exception) {
             $license = new NullLicense;
         }
 
-        $this->cache->set($license, $license);
+        $this->cache->set($licenseName, $license);
 
         return $license;
     }

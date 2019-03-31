@@ -105,17 +105,19 @@ class ReportCommand extends Command implements LicenseLookupAware
 
     private function splitColumnsIntoDependencies(array $output): array
     {
+        $dependencyParser = new DependencyParser;
         $mappedToObjects = [];
         foreach ($output as $dependency) {
-            $normalized = preg_replace('/\\s+/', ' ', $dependency);
-            $normalized = preg_replace("(\(|\))", '', $normalized);
-            $normalized = preg_replace('/ or /', ', ', $normalized);
-            $normalized = preg_replace('/, /', ' ', $normalized);
-            $columns = explode(' ', $normalized);
-            $mappedToObjects[] = (new Dependency)
-                ->setName($columns[0])
-                ->setVersion($columns[1])
-                ->setLicense($columns[2]);
+            $mappedToObjects[] = $dependencyParser->parse($dependency);
+//            $normalized = preg_replace('/\\s+/', ' ', $dependency);
+//            $normalized = preg_replace("(\(|\))", '', $normalized);
+//            $normalized = preg_replace('/ or /', ', ', $normalized);
+//            $normalized = preg_replace('/, /', ' ', $normalized);
+//            $columns = explode(' ', $normalized);
+//            $mappedToObjects[] = (new Dependency)
+//                ->setName($columns[0])
+//                ->setVersion($columns[1])
+//                ->setLicense($columns[2]);
         }
 
         return $mappedToObjects;
