@@ -92,14 +92,11 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
 
     private function splitColumnsIntoDependencies(array $output): array
     {
+        $parser = new DependencyParser;
+
         $mappedToObjects = [];
         foreach ($output as $dependency) {
-            $normalized = preg_replace('/\\s+/', ' ', $dependency);
-            $columns = explode(' ', $normalized);
-            $mappedToObjects[] = (new Dependency)
-                ->setName($columns[0])
-                ->setVersion($columns[1])
-                ->setLicense($columns[2]);
+            $mappedToObjects[] = $parser->parse($dependency);
         }
 
         return $mappedToObjects;
@@ -139,10 +136,12 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
     {
         $byLicense = [];
         foreach ($violators as $violator) {
-            if (! isset($byLicense[$violator->getLicense()])) {
-                $byLicense[$violator->getLicense()] = [];
+            $license = $violator->getLicenses()[0];
+
+            if (! isset($byLicense[$license])) {
+                $byLicense[$license] = [];
             }
-            $byLicense[$violator->getLicense()][] = $violator;
+            $byLicense[$license][] = $violator;
         }
 
         foreach ($byLicense as $license => $violators) {

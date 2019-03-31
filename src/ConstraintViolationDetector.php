@@ -10,10 +10,10 @@ use Dominikb\ComposerLicenseChecker\Contracts\LicenseConstraintHandler;
 class ConstraintViolationDetector implements LicenseConstraintHandler
 {
     /** @var string[] */
-    protected $blacklist;
+    protected $blacklist = [];
 
     /** @var string[] */
-    protected $whitelist;
+    protected $whitelist = [];
 
     public function setBlacklist(array $licenses): void
     {
@@ -63,7 +63,7 @@ class ConstraintViolationDetector implements LicenseConstraintHandler
 
         if (! empty($this->blacklist)) {
             foreach ($dependencies as $dependency) {
-                if (in_array($dependency->getLicense(), $this->blacklist)) {
+                if ($this->allLicensesOnList($dependency->getLicenses(), $this->blacklist)) {
                     $violation->add($dependency);
                 }
             }
@@ -81,12 +81,17 @@ class ConstraintViolationDetector implements LicenseConstraintHandler
 
         if (! empty($this->whitelist)) {
             foreach ($dependencies as $dependency) {
-                if (! in_array($dependency->getLicense(), $this->whitelist)) {
+                if (! in_array($dependency->getLicenses(), $this->whitelist)) {
                     $violation->add($dependency);
                 }
             }
         }
 
         return $violation;
+    }
+
+    private function allLicensesOnList(array $licenses, array $list): bool
+    {
+        return count(array_intersect($licenses, $list)) === count($licenses);
     }
 }

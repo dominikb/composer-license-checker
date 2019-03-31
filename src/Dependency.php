@@ -12,8 +12,8 @@ class Dependency
     /** @var string */
     private $version;
 
-    /** @var string */
-    private $license;
+    /** @var string[] */
+    private $licenses;
 
     /**
      * @return string
@@ -25,8 +25,6 @@ class Dependency
 
     /**
      * @param string $name
-     *
-     * @return Dependency
      */
     public function setName(string $name): self
     {
@@ -45,8 +43,6 @@ class Dependency
 
     /**
      * @param string $version
-     *
-     * @return Dependency
      */
     public function setVersion(string $version): self
     {
@@ -56,21 +52,19 @@ class Dependency
     }
 
     /**
-     * @return string
+     * @return string[]
      */
-    public function getLicense(): string
+    public function getLicenses(): array
     {
-        return $this->license;
+        return $this->licenses;
     }
 
     /**
-     * @param string $license
-     *
-     * @return Dependency
+     * @param string[] $licenses
      */
-    public function setLicense(string $license): self
+    public function setLicenses(array $licenses): self
     {
-        $this->license = $license;
+        $this->licenses = $licenses;
 
         return $this;
     }
