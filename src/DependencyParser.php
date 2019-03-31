@@ -1,15 +1,15 @@
-<?php declare(strict_types = 1);
+<?php
 
+declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker;
 
-
 class DependencyParser
 {
-    const REPEATED_WHITESPACE               = '/\\s+/';
-    const EVERYTHING_BEFORE_FIRST_SPACE     = '/^[^ ]* /';
-    const SEMVER                            = '/^v?\d+\.\d+(\.\d+)?(-[\w\d]*)?/';
-    const ROUND_BRACKETS                    = '(\(|\))';
+    const REPEATED_WHITESPACE = '/\\s+/';
+    const EVERYTHING_BEFORE_FIRST_SPACE = '/^[^ ]* /';
+    const SEMVER = '/^v?\d+\.\d+(\.\d+)?(-[\w\d]*)?/';
+    const ROUND_BRACKETS = '(\(|\))';
     const SPACE_WITH_OPTIONAL_LEADING_COMMA = '/,?\s/';
 
     public function parse(string $row): Dependency
@@ -25,8 +25,7 @@ class DependencyParser
         return (new Dependency)
             ->setName($name)
             ->setVersion($version)
-            ->setLicenses($licenses)
-            ;
+            ->setLicenses($licenses);
     }
 
     private function extractDependencyName(string $row): array
@@ -54,7 +53,7 @@ class DependencyParser
 
         [$branchName, $commit] = $parts;
 
-        return ["$branchName - $commit", join(' ', array_slice($parts, 2))];
+        return ["$branchName - $commit", implode(' ', array_slice($parts, 2))];
     }
 
     private function dependsOnVersion(string $row): ?string
