@@ -1,12 +1,12 @@
-<?php declare(strict_types = 1);
+<?php
 
+declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker\Tests;
 
-
+use Dominikb\ComposerLicenseChecker\Dependency;
 use Dominikb\ComposerLicenseChecker\ConstraintViolation;
 use Dominikb\ComposerLicenseChecker\ConstraintViolationDetector;
-use Dominikb\ComposerLicenseChecker\Dependency;
 
 class ConstraintViolationDetectorTest extends TestCase
 {
@@ -51,11 +51,11 @@ class ConstraintViolationDetectorTest extends TestCase
     {
         $anyViolationFound = false;
 
-        foreach($violations as $violation) {
+        foreach ($violations as $violation) {
             $anyViolationFound = $anyViolationFound || $violation->hasViolators();
         }
 
-        $this->assertTrue($anyViolationFound, "At least one violation was expected but no violation was found!");
+        $this->assertTrue($anyViolationFound, 'At least one violation was expected but no violation was found!');
     }
 
     /**
@@ -65,10 +65,10 @@ class ConstraintViolationDetectorTest extends TestCase
     {
         $anyViolationFound = false;
 
-        foreach($violations as $violation) {
+        foreach ($violations as $violation) {
             $anyViolationFound = $anyViolationFound || $violation->hasViolators();
         }
 
-        $this->assertFalse($anyViolationFound, "No violations were expected but violations were found!");
+        $this->assertFalse($anyViolationFound, 'No violations were expected but violations were found!');
     }
 }
