@@ -7,6 +7,7 @@ namespace Dominikb\ComposerLicenseChecker\Tests;
 use Dominikb\ComposerLicenseChecker\Dependency;
 use Dominikb\ComposerLicenseChecker\ConstraintViolation;
 use Dominikb\ComposerLicenseChecker\ConstraintViolationDetector;
+use Dominikb\ComposerLicenseChecker\Exceptions\LogicException;
 
 class ConstraintViolationDetectorTest extends TestCase
 {
@@ -18,6 +19,16 @@ class ConstraintViolationDetectorTest extends TestCase
         parent::__construct($name, $data, $dataName);
 
         $this->detector = new ConstraintViolationDetector;
+    }
+
+    /** @test */
+    public function it_throws_a_logic_exception_given_an_overlap_between_black_and_whitelist()
+    {
+        $this->detector->setWhitelist(['MIT', 'other-license']);
+        $this->detector->setBlacklist(['MIT', 'another-license']);
+
+        $this->expectException(LogicException::class);
+        $this->detector->detectViolations([]);
     }
 
     /** @test */
@@ -42,6 +53,18 @@ class ConstraintViolationDetectorTest extends TestCase
         $violations = $this->detector->detectViolations([$dependency]);
 
         $this->assertViolationNotFound($violations);
+    }
+
+    /** @test */
+    public function given_a_non_white_listed_license_a_violation_is_detected()
+    {
+        $this->detector->setWhitelist(['MIT']);
+
+        $dependency = (new Dependency)->setLicenses(['not-white-listed']);
+
+        $this->assertViolationFound(
+            $this->detector->detectViolations([$dependency])
+        );
     }
 
     /**

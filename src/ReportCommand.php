@@ -4,23 +4,51 @@ declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker;
 
+use Dominikb\ComposerLicenseChecker\Contracts\DependencyLoaderAware;
+use Dominikb\ComposerLicenseChecker\Traits\DependencyLoaderAwareTrait;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Dominikb\ComposerLicenseChecker\Exceptions\ParsingException;
 use Dominikb\ComposerLicenseChecker\Contracts\LicenseLookupAware;
 use Dominikb\ComposerLicenseChecker\Traits\LicenseLookupAwareTrait;
 
-class ReportCommand extends Command implements LicenseLookupAware
+class ReportCommand extends Command implements LicenseLookupAware, DependencyLoaderAware
 {
-    use LicenseLookupAwareTrait;
+    use LicenseLookupAwareTrait, DependencyLoaderAwareTrait;
 
     const LINES_BEFORE_DEPENDENCY_VERSIONS = 2;
 
+    protected static $defaultName = 'report';
+
+    protected function configure()
+    {
+        $this->setDefinition(new InputDefinition([
+            new InputOption(
+                'project-path',
+                'p',
+                InputOption::VALUE_OPTIONAL,
+                'Path to directory of composer.json file',
+                realpath('.')
+            ),
+            new InputOption(
+                'composer',
+                'c',
+                InputOption::VALUE_OPTIONAL,
+                'Path to composer executable',
+                realpath('./vendor/bin/composer')
+            )
+        ]));
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $dependencies = $this->loadDependencies($input);
+        $dependencies = $this->dependencyLoader->loadDependencies(
+            $input->getOption('composer'),
+            $input->getOption('project-path')
+        );
 
         $groupedByLicense = $this->groupDependenciesByLicense($dependencies);
 
@@ -63,64 +91,18 @@ class ReportCommand extends Command implements LicenseLookupAware
     }
 
     /**
-     * @param InputInterface $input
+     * @param Dependency[] $dependencies
      *
      * @return array
-     * @throws ParsingException
      */
-    private function loadDependencies(InputInterface $input): array
-    {
-        $commandOutput = $this->runComposerLicenseCommand($input);
-
-        $cleanOutput = $this->stripHeadersFromOutput($commandOutput);
-
-        return $this->splitColumnsIntoDependencies($cleanOutput);
-    }
-
-    private function runComposerLicenseCommand(InputInterface $input): array
-    {
-        $composer = $input->getOption('composer') ?? realpath('./vendor/bin/composer');
-        $projectPath = $input->getOption('project-path') ?? realpath('./');
-
-        $command = sprintf('%s -d %s licenses', $composer, $projectPath);
-
-        exec($command, $output);
-
-        return $output;
-    }
-
-    /**
-     * @throws ParsingException
-     */
-    private function stripHeadersFromOutput(array $output): array
-    {
-        for ($i = 0; $i < count($output); $i++) {
-            if ($output[$i] === '') {
-                return array_slice($output, $i + self::LINES_BEFORE_DEPENDENCY_VERSIONS);
-            }
-        }
-
-        throw new ParsingException('Could not filter out headers!');
-    }
-
-    private function splitColumnsIntoDependencies(array $output): array
-    {
-        $dependencyParser = new DependencyParser;
-
-        $mappedToObjects = [];
-        foreach ($output as $dependency) {
-            $mappedToObjects[] = $dependencyParser->parse($dependency);
-        }
-
-        return $mappedToObjects;
-    }
-
     private function groupDependenciesByLicense(array $dependencies)
     {
         $grouped = [];
 
         foreach ($dependencies as $dependency) {
-            if (! isset($grouped[$license = $dependency->getLicense()])) {
+            [$license] = $dependency->getLicenses();
+
+            if (! isset($grouped[$license])) {
                 $grouped[$license] = [];
             }
             $grouped[$license][] = $dependency;

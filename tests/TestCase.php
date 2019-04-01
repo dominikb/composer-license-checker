@@ -6,4 +6,5 @@ namespace Dominikb\ComposerLicenseChecker\Tests;
 
 class TestCase extends \PHPUnit\Framework\TestCase
 {
+
 }

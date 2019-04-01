@@ -3,6 +3,7 @@
 
 use Dominikb\ComposerLicenseChecker\CheckCommand;
 use Dominikb\ComposerLicenseChecker\ConstraintViolationDetector;
+use Dominikb\ComposerLicenseChecker\DependencyLoader;
 use Dominikb\ComposerLicenseChecker\LicenseLookup;
 use Dominikb\ComposerLicenseChecker\ReportCommand;
 use GuzzleHttp\Client;
@@ -15,59 +16,20 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-
 $output = new ConsoleOutput();
 
 $httpClient = new Client;
 
 $licenceLookUp = new LicenseLookup($httpClient);
 
-$checkCommand = new CheckCommand('check');
+$checkCommand = new CheckCommand;
 $checkCommand->setLicenseLookup($licenceLookUp);
 $checkCommand->setLicenseConstraintHandler(new ConstraintViolationDetector);
-$checkCommand->setDefinition(new InputDefinition([
-    new InputOption(
-        'project-path',
-        'p',
-        InputOption::VALUE_OPTIONAL,
-        'Path to directory of composer.json file'
-    ),
-    new InputOption(
-        'composer',
-        'c',
-        InputOption::VALUE_OPTIONAL,
-        'Path to composer executable'
-    ),
-    new InputOption(
-        'whitelist',
-        'w',
-        InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-        'Set a list of licenses you want to permit for usage'
-    ),
-    new InputOption(
-        'blacklist',
-        'b',
-        InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-        'Set a list of licenses you want to forbid for usage'
-    )
-]));
+$checkCommand->setDependencyLoader(new DependencyLoader);
 
-$reportCommand = new ReportCommand('report');
+$reportCommand = new ReportCommand;
 $reportCommand->setLicenseLookup($licenceLookUp);
-$reportCommand->setDefinition(new InputDefinition([
-    new InputOption(
-        'project-path',
-        'p',
-        InputOption::VALUE_OPTIONAL,
-        'Path to directory of composer.json file'
-    ),
-    new InputOption(
-        'composer',
-        'c',
-        InputOption::VALUE_OPTIONAL,
-        'Path to composer executable'
-    )
-]));
+$reportCommand->setDependencyLoader(new DependencyLoader);
 
 $application = new Application('composer-license-checker', '1.0.0');
 
