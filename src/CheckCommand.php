@@ -2,17 +2,17 @@
 
 namespace Dominikb\ComposerLicenseChecker;
 
-use Dominikb\ComposerLicenseChecker\Contracts\DependencyLoaderAware;
-use Dominikb\ComposerLicenseChecker\Traits\DependencyLoaderAwareTrait;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputDefinition;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Logger\ConsoleLogger;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Output\OutputInterface;
 use Dominikb\ComposerLicenseChecker\Contracts\LicenseLookupAware;
 use Dominikb\ComposerLicenseChecker\Traits\LicenseLookupAwareTrait;
+use Dominikb\ComposerLicenseChecker\Contracts\DependencyLoaderAware;
 use Dominikb\ComposerLicenseChecker\Contracts\LicenseConstraintAware;
+use Dominikb\ComposerLicenseChecker\Traits\DependencyLoaderAwareTrait;
 use Dominikb\ComposerLicenseChecker\Traits\LicenseConstraintAwareTrait;
 use Dominikb\ComposerLicenseChecker\Exceptions\CommandExecutionException;
 
@@ -55,7 +55,7 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
                 'b',
                 InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                 'Set a list of licenses you want to forbid for usage'
-            )
+            ),
         ]));
     }
 
@@ -104,7 +104,7 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
      * @param ConstraintViolation[] $violations
      *
      *@throws CommandExecutionException
-*/
+     */
     private function handleViolations(array $violations): void
     {
         foreach ($violations as $violation) {
