@@ -1,11 +1,11 @@
-<?php declare(strict_types = 1);
+<?php
 
+declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker\Tests;
 
-
-use Dominikb\ComposerLicenseChecker\DependencyLoader;
 use Mockery;
+use Dominikb\ComposerLicenseChecker\DependencyLoader;
 
 class DependencyLoaderTest extends TestCase
 {
@@ -14,14 +14,13 @@ class DependencyLoaderTest extends TestCase
     {
         $loader = Mockery::mock(DependencyLoader::class)
                          ->shouldAllowMockingProtectedMethods()
-                         ->makePartial()
-        ;
+                         ->makePartial();
 
         $command = '';
         $loader->shouldReceive('exec')
                ->once()
                ->withArgs(function ($c) use (&$command) {
-                   return !!($command = $c);
+                   return (bool) ($command = $c);
                })
                ->andReturn([
                    'Name: dominikb/composer-license-checker',
@@ -30,8 +29,7 @@ class DependencyLoaderTest extends TestCase
                    'Dependencies:',
                    '',
                    'Name                                Version  License   ',
-               ])
-        ;
+               ]);
 
         $loader->loadDependencies('./composerpath/composer-binary', '/some/directory');
 

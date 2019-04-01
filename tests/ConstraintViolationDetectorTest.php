@@ -6,8 +6,8 @@ namespace Dominikb\ComposerLicenseChecker\Tests;
 
 use Dominikb\ComposerLicenseChecker\Dependency;
 use Dominikb\ComposerLicenseChecker\ConstraintViolation;
-use Dominikb\ComposerLicenseChecker\ConstraintViolationDetector;
 use Dominikb\ComposerLicenseChecker\Exceptions\LogicException;
+use Dominikb\ComposerLicenseChecker\ConstraintViolationDetector;
 
 class ConstraintViolationDetectorTest extends TestCase
 {
