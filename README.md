@@ -17,10 +17,18 @@ composer require dominikb/composer-license-checker
 
 ## Usage
 
-> This package is in an early phase, options for interaction will be available soon.
+Two separate commands are provided:
+* `./composer-license-checker check`
+* `./composer-license-checker report`
+
+Use `./composer-license-checker help` to get info about general usage or use the syntax `./composer-license-checker help COMMAND_NAME` to see more information about a specific command available. 
+
+> This package is in an early phase. The API may still change before a first release.
 
 ``` bash
-vendor/bin/composer-license-checker
+vendor/bin/composer-license-checker check --whitelist MIT
+
+vendor/bin/composer-license-checker report -p /path/to/your/project -c /path/to/composer.phar
 ```
 
 ### Testing
@@ -28,6 +36,8 @@ vendor/bin/composer-license-checker
 ``` bash
 composer test
 ```
+
+Code coverage reports are output to the `build` folder. See `.phpunit.xml.dist` for more testing configuration.
 
 ### Changelog
 
