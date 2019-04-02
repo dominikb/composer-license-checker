@@ -105,7 +105,7 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
             if (! isset($grouped[$license])) {
                 $grouped[$license] = [];
             }
-            $grouped[$license][] = $dependency; 
+            $grouped[$license][] = $dependency;
         }
 
         return $grouped;
