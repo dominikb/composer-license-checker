@@ -15,6 +15,7 @@ use Dominikb\ComposerLicenseChecker\Contracts\LicenseConstraintAware;
 use Dominikb\ComposerLicenseChecker\Traits\DependencyLoaderAwareTrait;
 use Dominikb\ComposerLicenseChecker\Traits\LicenseConstraintAwareTrait;
 use Dominikb\ComposerLicenseChecker\Exceptions\CommandExecutionException;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class CheckCommand extends Command implements LicenseLookupAware, LicenseConstraintAware, DependencyLoaderAware
 {
@@ -26,6 +27,8 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
 
     /** @var ConsoleLogger */
     private $logger;
+    /** @var SymfonyStyle */
+    private $io;
 
     protected function configure()
     {
@@ -65,6 +68,9 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
     public function execute(InputInterface $input, OutputInterface $output): void
     {
         $this->logger = new ConsoleLogger($output);
+        $this->io = new SymfonyStyle($input, $output);
+
+        $this->io->title('Reading through dependencies and checking their versions ...');
 
         $this->ensureCommandCanBeExecuted();
 
@@ -73,9 +79,17 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
             $input->getOption('project-path')
         );
 
+        $this->io->writeln(count($dependencies) . ' dependencies were found ...');
+        $this->io->newLine();
+
         $violations = $this->determineViolations($dependencies, $input->getOption('blacklist'), $input->getOption('whitelist'));
 
-        $this->handleViolations($violations);
+        try {
+            $this->handleViolations($violations);
+            $this->io->success('Command finished successfully. No violations detected!');
+        } catch (CommandExecutionException $exception) {
+            $this->io->error($exception->getMessage());
+        }
     }
 
     /**
@@ -107,14 +121,17 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
      */
     private function handleViolations(array $violations): void
     {
+        $violationsFound = false;
+
         foreach ($violations as $violation) {
             if ($violation->hasViolators()) {
-                $this->logger->error($violation->getTitle());
+                $this->io->error($violation->getTitle());
                 $this->reportViolators($violation->getViolators());
+                $violationsFound = true;
             }
         }
 
-        if ($this->logger->hasErrored()) {
+        if ($violationsFound) {
             throw new CommandExecutionException('Violators found during execution!');
         }
     }
@@ -139,8 +156,8 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
                 return sprintf('"%s"', $dependency->getName());
             }, $violators);
 
-            $this->logger->notice("$license:");
-            $this->logger->info(implode(',', $violatorNames));
+            $this->io->title($license);
+            $this->io->writeln(implode(', ', $violatorNames));
         }
     }
 }
