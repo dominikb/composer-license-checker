@@ -4,6 +4,7 @@ namespace Dominikb\ComposerLicenseChecker;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Logger\ConsoleLogger;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -15,7 +16,6 @@ use Dominikb\ComposerLicenseChecker\Contracts\LicenseConstraintAware;
 use Dominikb\ComposerLicenseChecker\Traits\DependencyLoaderAwareTrait;
 use Dominikb\ComposerLicenseChecker\Traits\LicenseConstraintAwareTrait;
 use Dominikb\ComposerLicenseChecker\Exceptions\CommandExecutionException;
-use Symfony\Component\Console\Style\SymfonyStyle;
 
 class CheckCommand extends Command implements LicenseLookupAware, LicenseConstraintAware, DependencyLoaderAware
 {
@@ -79,7 +79,7 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
             $input->getOption('project-path')
         );
 
-        $this->io->writeln(count($dependencies) . ' dependencies were found ...');
+        $this->io->writeln(count($dependencies).' dependencies were found ...');
         $this->io->newLine();
 
         $violations = $this->determineViolations($dependencies, $input->getOption('blacklist'), $input->getOption('whitelist'));
