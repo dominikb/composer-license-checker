@@ -28,7 +28,7 @@ class DependencyLoader implements DependencyLoaderContract
 
     private function stripHeadersFromOutput(array $output): array
     {
-        return array_slice($output, self::LINES_BEFORE_DEPENDENCY_VERSIONS - 1);
+        return array_slice($output, self::LINES_BEFORE_DEPENDENCY_VERSIONS);
     }
 
     private function splitColumnsIntoDependencies(array $output): array
