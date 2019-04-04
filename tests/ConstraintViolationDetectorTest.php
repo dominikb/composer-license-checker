@@ -67,6 +67,18 @@ class ConstraintViolationDetectorTest extends TestCase
         );
     }
 
+    /** @test */
+    public function given_at_least_one_whitelisted_licenses_no_violation_is_detected()
+    {
+        $this->detector->setWhitelist(['MIT']);
+
+        $dependency = (new Dependency)->setLicenses(['violation', 'MIT']);
+
+        $this->assertViolationNotFound(
+            $this->detector->detectViolations([$dependency])
+        );
+    }
+
     /**
      * @param ConstraintViolation[] $violations
      */

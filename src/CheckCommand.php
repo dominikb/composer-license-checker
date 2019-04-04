@@ -153,7 +153,7 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
 
         foreach ($byLicense as $license => $violators) {
             $violatorNames = array_map(function (Dependency $dependency) {
-                return sprintf('"%s"', $dependency->getName());
+                return sprintf('"%s [%s]"', $dependency->getName(), $dependency->getVersion());
             }, $violators);
 
             $this->io->title($license);

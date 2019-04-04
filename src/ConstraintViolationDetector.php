@@ -81,8 +81,7 @@ class ConstraintViolationDetector implements LicenseConstraintHandler
 
         if (! empty($this->whitelist)) {
             foreach ($dependencies as $dependency) {
-                $hasWhitelistedLicense = 0 < count(array_intersect($dependency->getLicenses(), $this->whitelist));
-                if (! $hasWhitelistedLicense) {
+                if (! $this->anyLicenseOnList($dependency->getLicenses(), $this->whitelist)) {
                     $violation->add($dependency);
                 }
             }
@@ -94,5 +93,10 @@ class ConstraintViolationDetector implements LicenseConstraintHandler
     private function allLicensesOnList(array $licenses, array $list): bool
     {
         return count(array_intersect($licenses, $list)) === count($licenses);
+    }
+
+    private function anyLicenseOnList(array $licenses, array $list): bool
+    {
+        return count(array_intersect($licenses, $list)) > 0;
     }
 }
