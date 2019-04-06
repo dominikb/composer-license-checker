@@ -1,7 +1,7 @@
 {
     "name": "dominikb/composer-license-checker",
     "description": "Utility to check for used licenses and screen them.",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "keywords": [
         "dominikb",
         "composer-license-checker"
