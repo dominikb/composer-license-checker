@@ -2,8 +2,6 @@
 
 declare(strict_types=1);
 
-require_once __DIR__.'/../vendor/autoload.php';
-
 if (! function_exists('array_map_keys')) {
     /**
      * @param array    $input
