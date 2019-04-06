@@ -1,8 +1,8 @@
-<?php declare(strict_types = 1);
+<?php
 
+declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker\Tests;
-
 
 class HelpersTest extends TestCase
 {
@@ -11,7 +11,7 @@ class HelpersTest extends TestCase
     {
         $array = ['key' => 'value'];
 
-        $mapped = array_map_keys($array, function($key, $value) {
+        $mapped = array_map_keys($array, function ($key, $value) {
             $this->assertSame('key', $key);
             $this->assertSame('value', $value);
 
