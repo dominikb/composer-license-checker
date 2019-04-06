@@ -1,11 +1,14 @@
 # Composer License Checker
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/dominikb/composer-license-checker.svg?style=flat-square)](https://packagist.org/packages/dominikb/composer-license-checker)
-[![Build Status](https://img.shields.io/travis/dominikb/composer-license-checker/master.svg?style=flat-square)](https://travis-ci.com/dominikb/composer-license-checker)
+[![Build Status](https://img.shields.io/travis/com/dominikb/composer-license-checker.svg?style=flat-square)](https://travis-ci.com/dominikb/composer-license-checker)
 [![Quality Score](https://img.shields.io/scrutinizer/g/dominikb/composer-license-checker.svg?style=flat-square)](https://scrutinizer-ci.com/g/dominikb/composer-license-checker)
 [![Total Downloads](https://img.shields.io/packagist/dt/dominikb/composer-license-checker.svg?style=flat-square)](https://packagist.org/packages/dominikb/composer-license-checker)
 
-Crawl through your dependencies and look up their licenses on [https://tldrlegal.com/](https://tldrlegal.com/) for a quick summary on whats allowed with each license and how the support may be used.
+Quickly scan your dependencies, see what licenses they use or check in your CI that no unwanted licenses were merged.
+
+The lookup of the summaries for every license done on [https://tldrlegal.com/](https://tldrlegal.com/).  
+Please inform yourself in more detail about the licenses you use and do not use the provided summary as your sole information.
 
 ## Installation
 
@@ -22,8 +25,6 @@ Two separate commands are provided:
 * `./composer-license-checker report`
 
 Use `./composer-license-checker help` to get info about general usage or use the syntax `./composer-license-checker help COMMAND_NAME` to see more information about a specific command available. 
-
-> This package is in an early phase. The API may still change before a first release.
 
 ``` bash
 vendor/bin/composer-license-checker check --whitelist MIT

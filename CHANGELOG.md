@@ -2,6 +2,15 @@
 
 All notable changes to `composer-license-checker` will be documented in this file
 
-## 1.0.0 - 201X-XX-XX
+## 1.0.0 - 2019-04-06
 
-- initial release
+Initial Release
+
+### Added
+- `check` and `report` commands
+- summary lookup on tldrlegal
+- caching of lookups
+
+### Changed
+
+### Removed

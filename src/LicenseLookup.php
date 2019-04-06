@@ -60,7 +60,7 @@ class LicenseLookup implements LicenseLookupContract
      */
     private function queryForDetailPageUrl(string $licenseShortName): string
     {
-        if (in_array($licenseShortName, static::$noLookup)) {
+        if (in_array($licenseShortName, self::$noLookup)) {
             throw new NoLookupPossibleException;
         }
 
