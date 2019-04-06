@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker;
 
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputDefinition;
-use Symfony\Component\Console\Output\OutputInterface;
-use Dominikb\ComposerLicenseChecker\Contracts\LicenseLookupAware;
-use Dominikb\ComposerLicenseChecker\Traits\LicenseLookupAwareTrait;
 use Dominikb\ComposerLicenseChecker\Contracts\DependencyLoaderAware;
+use Dominikb\ComposerLicenseChecker\Contracts\LicenseLookupAware;
 use Dominikb\ComposerLicenseChecker\Traits\DependencyLoaderAwareTrait;
+use Dominikb\ComposerLicenseChecker\Traits\LicenseLookupAwareTrait;
+use Symfony\Component\Cache\Simple\NullCache;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\Table;
+use Symfony\Component\Console\Input\InputDefinition;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class ReportCommand extends Command implements LicenseLookupAware, DependencyLoaderAware
 {
@@ -40,6 +41,12 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
                 'Path to composer executable',
                 realpath('./vendor/bin/composer')
             ),
+            new InputOption(
+                'no-cache',
+                null,
+                InputOption::VALUE_NONE,
+                'Disables caching of license lookups'
+            ),
         ]));
     }
 
@@ -50,14 +57,62 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
             $input->getOption('project-path')
         );
 
-        $groupedByLicense = $this->groupDependenciesByLicense($dependencies);
+        $groupedByName = $this->groupDependenciesByLicense($dependencies);
 
-        $licenses = $this->lookUpLicenses(array_keys($groupedByLicense));
+        $shouldCache = ! $input->getOption('no-cache');
+        $licenses = $this->lookUpLicenses(array_keys($groupedByName), $output, $shouldCache);
 
         /** @var License $license */
+        $this->outputFormattedLicenses($output, $licenses, $groupedByName);
+    }
+
+    /**
+     * @param Dependency[] $dependencies
+     *
+     * @return array
+     */
+    private function groupDependenciesByLicense(array $dependencies)
+    {
+        $grouped = [];
+
+        foreach ($dependencies as $dependency) {
+            [$license] = $dependency->getLicenses();
+
+            if (! isset($grouped[$license])) {
+                $grouped[$license] = [];
+            }
+            $grouped[$license][] = $dependency;
+        }
+
+        return $grouped;
+    }
+
+    private function lookUpLicenses(array $licenses, OutputInterface $output, $useCache = true)
+    {
+        if ( ! $useCache) {
+            $this->licenseLookup->setCache(new NullCache);
+        }
+
+        $lookedUp = [];
         foreach ($licenses as $license) {
-            $usageCount = count($groupedByLicense[$license->getShortName()]);
-            $headline = sprintf("\nCount %d - %s (%s)", $usageCount, $license->getShortName(), $license->getSource());
+            $output->writeln("Looking up $license ...");
+            $lookedUp[$license] = $this->licenseLookup->lookUp($license);
+        }
+
+        return $lookedUp;
+    }
+
+    /**
+     * @param OutputInterface $output
+     * @param License[]       $licenses
+     * @param array           $groupedByName
+     */
+    protected function outputFormattedLicenses(OutputInterface $output, array $licenses, array $groupedByName): void
+    {
+        foreach ($licenses as $license) {
+            $usageCount = count($groupedByName[$license->getShortName()]);
+            $headline = sprintf(PHP_EOL . "Count %d - %s (%s)", $usageCount, $license->getShortName(),
+                $license->getSource());
             $output->writeln($headline);
             $licenseTable = new Table($output);
             $licenseTable->setHeaders(['CAN', 'CAN NOT', 'MUST']);
@@ -88,36 +143,5 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
             }
             $licenseTable->render();
         }
-    }
-
-    /**
-     * @param Dependency[] $dependencies
-     *
-     * @return array
-     */
-    private function groupDependenciesByLicense(array $dependencies)
-    {
-        $grouped = [];
-
-        foreach ($dependencies as $dependency) {
-            [$license] = $dependency->getLicenses();
-
-            if (! isset($grouped[$license])) {
-                $grouped[$license] = [];
-            }
-            $grouped[$license][] = $dependency;
-        }
-
-        return $grouped;
-    }
-
-    private function lookUpLicenses(array $licenses)
-    {
-        $lookedUp = [];
-        foreach ($licenses as $license) {
-            $lookedUp[$license] = $this->licenseLookup->lookUp($license);
-        }
-
-        return $lookedUp;
     }
 }

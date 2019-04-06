@@ -1,16 +1,16 @@
-<?php
+<?php declare(strict_types = 1);
 
-declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker;
 
+
 use DateTimeImmutable;
 
-class NullLicense extends License
+class NoLookupLicenses extends License
 {
-    public function __construct()
+    public function __construct(string $shortName)
     {
-        $this->setShortName('-');
+        $this->setShortName($shortName);
         $this->setCan([]);
         $this->setCannot([]);
         $this->setMust([]);

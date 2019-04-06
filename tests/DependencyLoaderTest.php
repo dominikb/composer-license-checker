@@ -28,7 +28,8 @@ class DependencyLoaderTest extends TestCase
                    'Licenses: MIT',
                    'Dependencies:',
                    '',
-                   'Name                                Version  License   ',
+                   'Name                                  Version              License   ',
+                   'dominikb/composer-license-checker     dev-master f12312    MIT',
                ]);
 
         $loader->loadDependencies('./composerpath/composer-binary', '/some/directory');

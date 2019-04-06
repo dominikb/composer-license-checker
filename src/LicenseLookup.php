@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace Dominikb\ComposerLicenseChecker;
 
 use DateTimeImmutable;
-use InvalidArgumentException;
+use Dominikb\ComposerLicenseChecker\Exceptions\NoLookupPossibleException;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\ClientInterface;
 use Psr\SimpleCache\CacheInterface;
 use Symfony\Component\DomCrawler\Crawler;
@@ -20,6 +21,11 @@ class LicenseLookup implements LicenseLookupContract
     protected $http;
     /** @var CacheInterface */
     protected $cache;
+    /** @var string[] */
+    private static $noLookup = [
+        'none',
+        'proprietary',
+    ];
 
     public function __construct(ClientInterface $http, CacheInterface $cache = null)
     {
@@ -37,8 +43,8 @@ class LicenseLookup implements LicenseLookupContract
             $detailsPageUrl = $this->queryForDetailPageUrl($licenseName);
 
             $license = $this->resolveLicenseInformation($licenseName, $detailsPageUrl);
-        } catch (InvalidArgumentException $exception) {
-            $license = new NullLicense;
+        }catch (NoLookupPossibleException $exception) {
+            $license = new NoLookupLicenses($licenseName);
         }
 
         $this->cache->set($licenseName, $license);
@@ -46,18 +52,34 @@ class LicenseLookup implements LicenseLookupContract
         return $license;
     }
 
+    /**
+     * @param string $licenseShortName
+     *
+     * @return string
+     * @throws NoLookupPossibleException
+     */
     private function queryForDetailPageUrl(string $licenseShortName): string
     {
+        if (in_array($licenseShortName, static::$noLookup)) {
+            throw new NoLookupPossibleException;
+        }
+
         $searchUrl = sprintf('%s/search?q=%s', static::API_HOST, $licenseShortName);
 
-        $response = $this->http->request('get', $searchUrl);
+        try {
+            $response = $this->http->request('get', $searchUrl);
+        } catch (GuzzleException $exception) {
+            throw new NoLookupPossibleException($exception->getMessage(), $exception->getCode(), $exception);
+        }
 
         $crawler = $this->makeCrawler($response->getBody()->getContents());
 
-        $relativeUrl = $crawler
-            ->filter('div#licenses > .search-result > a')
-            ->first()
-            ->attr('href');
+        $headings = $crawler->filter('div#licenses > .search-result > a > h3')->extract(['_text']);
+        $links = $crawler->filter('div#licenses > .search-result > a')->extract(['href']);
+
+        $zipped = array_map(null, $headings, $links);
+
+        $relativeUrl = $this->findBestMatch($zipped, $licenseShortName);
 
         return static::API_HOST.$relativeUrl;
     }
@@ -67,40 +89,50 @@ class LicenseLookup implements LicenseLookupContract
         return new Crawler($html);
     }
 
+    /**
+     * @param string $licenseShortName
+     * @param string $detailsPageUrl
+     *
+     * @return License
+     * @throws NoLookupPossibleException
+     */
     private function resolveLicenseInformation(string $licenseShortName, string $detailsPageUrl): License
     {
-        $response = $this->http->request('get', $detailsPageUrl);
-        $pageContent = $response->getBody()->getContents();
+        try {
+            $response = $this->http->request('get', $detailsPageUrl);
+            $pageContent = $response->getBody()->getContents();
 
-        $crawler = $this->makeCrawler($pageContent);
+            $crawler = $this->makeCrawler($pageContent);
 
-        $license = (new License)
-            ->setShortName($licenseShortName)
-            ->setCan($this->extractCans($crawler))
-            ->setCannot($this->extractCannots($crawler))
-            ->setMust($this->extractMusts($crawler))
-            ->setSource($detailsPageUrl)
-            ->setCreatedAt(new DateTimeImmutable);
+            $license = (new License($licenseShortName))
+                ->setCan($this->extractCans($crawler))
+                ->setCannot($this->extractCannots($crawler))
+                ->setMust($this->extractMusts($crawler))
+                ->setSource($detailsPageUrl)
+                ->setCreatedAt(new DateTimeImmutable);
 
-        return $license;
+            return $license;
+        } catch (GuzzleException $exception) {
+            throw new NoLookupPossibleException($exception->getMessage(), $exception->getCode(), $exception);
+        }
     }
 
-    private function extractCans(Crawler $crawler)
+    private function extractCans(Crawler $crawler): array
     {
         return $this->extractListByColor($crawler, 'green');
     }
 
-    private function extractCannots(Crawler $crawler)
+    private function extractCannots(Crawler $crawler): array
     {
         return $this->extractListByColor($crawler, 'red');
     }
 
-    private function extractMusts(Crawler $crawler)
+    private function extractMusts(Crawler $crawler): array
     {
         return $this->extractListByColor($crawler, 'blue');
     }
 
-    private function extractListByColor(Crawler $crawler, $color)
+    private function extractListByColor(Crawler $crawler, $color): array
     {
         $headings = $crawler->filter(".bucket-list.$color li div.attr-head")
                             ->each(function (Crawler $crawler) {
@@ -113,5 +145,38 @@ class LicenseLookup implements LicenseLookupContract
                           });
 
         return array_combine($headings, $bodies);
+    }
+
+    /**
+     * Find the best matching link by comparing the similarity of the link and text.
+     *
+     * @param array  $zipped
+     * @param string $licenseShortName
+     *
+     * @return string
+     */
+    private function findBestMatch(array $zipped, string $licenseShortName): string
+    {
+        $bestMatch = 0;
+        $matchingLink = '';
+
+        foreach($zipped as [$title, $link]) {
+            $titleMatch = similar_text($title, $licenseShortName);
+            $linkMatch = similar_text($link, $licenseShortName);
+
+            $totalMatch = $titleMatch + $linkMatch;
+
+            if ($totalMatch > $bestMatch) {
+                $bestMatch = $totalMatch;
+                $matchingLink = $link;
+            }
+        }
+
+        return $matchingLink;
+    }
+
+    public function setCache(CacheInterface $cache): void
+    {
+        $this->cache = $cache;
     }
 }

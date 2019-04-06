@@ -21,6 +21,11 @@ class License
     /** @var DateTimeInterface */
     protected $createdAt;
 
+    public function __construct(string $shortName)
+    {
+        $this->shortName = $shortName;
+    }
+
     /**
      * @return string
      */

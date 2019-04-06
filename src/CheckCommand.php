@@ -51,13 +51,13 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
                 'whitelist',
                 'w',
                 InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                'Set a list of licenses you want to permit for usage'
+                'Set a license you want to permit for usage'
             ),
             new InputOption(
                 'blacklist',
                 'b',
                 InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-                'Set a list of licenses you want to forbid for usage'
+                'Mark a specific license prohibited for usage'
             ),
         ]));
     }
@@ -70,7 +70,7 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
         $this->logger = new ConsoleLogger($output);
         $this->io = new SymfonyStyle($input, $output);
 
-        $this->io->title('Reading through dependencies and checking their versions ...');
+        $this->io->title('Reading through dependencies and checking their licenses ...');
 
         $this->ensureCommandCanBeExecuted();
 
