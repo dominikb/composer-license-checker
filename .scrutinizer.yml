@@ -23,4 +23,11 @@ build:
             tests:
                 override:
                     - php-scrutinizer-run
+        coverage:
+            tests:
+                override:
+                    - command: composer test-coverage
+                      coverage:
+                          file: build/logs/clover.xml
+                          format: clover
 
