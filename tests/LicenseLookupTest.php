@@ -1,18 +1,17 @@
-<?php declare(strict_types = 1);
+<?php
 
+declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker\Tests;
 
-
-use Dominikb\ComposerLicenseChecker\Dependency;
-use Dominikb\ComposerLicenseChecker\License;
-use Dominikb\ComposerLicenseChecker\LicenseLookup;
-use Dominikb\ComposerLicenseChecker\NoLookupLicenses;
 use GuzzleHttp\Client;
-use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Handler\MockHandler;
+use Dominikb\ComposerLicenseChecker\License;
 use Symfony\Component\Cache\Simple\NullCache;
+use Dominikb\ComposerLicenseChecker\LicenseLookup;
+use Dominikb\ComposerLicenseChecker\NoLookupLicenses;
 
 class LicenseLookupTest extends TestCase
 {
@@ -25,8 +24,8 @@ class LicenseLookupTest extends TestCase
     public function it_fuzzy_matches_the_best_link_to_detail_pages()
     {
         $handler = new MockHandler([
-            new Response(200, [], fopen(__DIR__ . '/apache-2.0-search.html', 'r')),
-            new Response()
+            new Response(200, [], fopen(__DIR__.'/apache-2.0-search.html', 'r')),
+            new Response(),
         ]);
         $client = new Client(['handler' => HandlerStack::create($handler)]);
 
@@ -58,8 +57,8 @@ class LicenseLookupTest extends TestCase
     public function given_an_error_when_looking_up_detail_information_it_returns_a_no_lookup_license()
     {
         $handler = new MockHandler([
-            new Response(200, [], fopen(__DIR__ . '/apache-2.0-search.html', 'r')),
-            new Response(500)
+            new Response(200, [], fopen(__DIR__.'/apache-2.0-search.html', 'r')),
+            new Response(500),
         ]);
         $client = new Client(['handler' => HandlerStack::create($handler)]);
         $lookup = new LicenseLookup($client, new NullCache);
@@ -73,7 +72,7 @@ class LicenseLookupTest extends TestCase
     public function given_an_error_when_searching_for_a_details_page_it_returns_a_no_lookup_license()
     {
         $handler = new MockHandler([
-            new Response(500)
+            new Response(500),
         ]);
         $client = new Client(['handler' => HandlerStack::create($handler)]);
         $lookup = new LicenseLookup($client, new NullCache);

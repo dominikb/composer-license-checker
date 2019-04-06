@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Dominikb\ComposerLicenseChecker;
 
 use DateTimeImmutable;
-use Dominikb\ComposerLicenseChecker\Exceptions\NoLookupPossibleException;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\ClientInterface;
 use Psr\SimpleCache\CacheInterface;
+use GuzzleHttp\Exception\GuzzleException;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\Cache\Simple\FilesystemCache;
+use Dominikb\ComposerLicenseChecker\Exceptions\NoLookupPossibleException;
 use Dominikb\ComposerLicenseChecker\Contracts\LicenseLookup as LicenseLookupContract;
 
 class LicenseLookup implements LicenseLookupContract
@@ -43,7 +43,7 @@ class LicenseLookup implements LicenseLookupContract
             $detailsPageUrl = $this->queryForDetailPageUrl($licenseName);
 
             $license = $this->resolveLicenseInformation($licenseName, $detailsPageUrl);
-        }catch (NoLookupPossibleException $exception) {
+        } catch (NoLookupPossibleException $exception) {
             $license = new NoLookupLicenses($licenseName);
         }
 
@@ -160,7 +160,7 @@ class LicenseLookup implements LicenseLookupContract
         $bestMatch = 0;
         $matchingLink = '';
 
-        foreach($zipped as [$title, $link]) {
+        foreach ($zipped as [$title, $link]) {
             $titleMatch = similar_text($title, $licenseShortName);
             $linkMatch = similar_text($link, $licenseShortName);
 

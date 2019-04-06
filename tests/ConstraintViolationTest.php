@@ -1,11 +1,11 @@
-<?php declare(strict_types = 1);
+<?php
 
+declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker\Tests;
 
-
-use Dominikb\ComposerLicenseChecker\ConstraintViolation;
 use Dominikb\ComposerLicenseChecker\Dependency;
+use Dominikb\ComposerLicenseChecker\ConstraintViolation;
 
 class ConstraintViolationTest extends TestCase
 {

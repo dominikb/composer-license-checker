@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker;
 
-use Dominikb\ComposerLicenseChecker\Contracts\DependencyLoaderAware;
-use Dominikb\ComposerLicenseChecker\Contracts\LicenseLookupAware;
-use Dominikb\ComposerLicenseChecker\Traits\DependencyLoaderAwareTrait;
-use Dominikb\ComposerLicenseChecker\Traits\LicenseLookupAwareTrait;
+use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Cache\Simple\NullCache;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Helper\Table;
-use Symfony\Component\Console\Input\InputDefinition;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Output\OutputInterface;
+use Dominikb\ComposerLicenseChecker\Contracts\LicenseLookupAware;
+use Dominikb\ComposerLicenseChecker\Traits\LicenseLookupAwareTrait;
+use Dominikb\ComposerLicenseChecker\Contracts\DependencyLoaderAware;
+use Dominikb\ComposerLicenseChecker\Traits\DependencyLoaderAwareTrait;
 
 class ReportCommand extends Command implements LicenseLookupAware, DependencyLoaderAware
 {
@@ -62,7 +62,7 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
         $shouldCache = ! $input->getOption('no-cache');
         $licenses = $this->lookUpLicenses(array_keys($groupedByName), $output, $shouldCache);
 
-        /** @var License $license */
+        /* @var License $license */
         $this->outputFormattedLicenses($output, $licenses, $groupedByName);
     }
 
@@ -89,7 +89,7 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
 
     private function lookUpLicenses(array $licenses, OutputInterface $output, $useCache = true)
     {
-        if ( ! $useCache) {
+        if (! $useCache) {
             $this->licenseLookup->setCache(new NullCache);
         }
 
@@ -111,7 +111,7 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
     {
         foreach ($licenses as $license) {
             $usageCount = count($groupedByName[$license->getShortName()]);
-            $headline = sprintf(PHP_EOL . "Count %d - %s (%s)", $usageCount, $license->getShortName(),
+            $headline = sprintf(PHP_EOL.'Count %d - %s (%s)', $usageCount, $license->getShortName(),
                 $license->getSource());
             $output->writeln($headline);
             $licenseTable = new Table($output);
