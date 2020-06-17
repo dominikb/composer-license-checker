@@ -2,6 +2,12 @@
 
 All notable changes to `composer-license-checker` will be documented in this file
 
+## 2.0.0 - 2020-06-17
+
+### Changed
+- Terminology for black/whitelist changed to block/allowlist (This changes the CLI interface of the `CheckCommand` )
+- `Command` classes now return an integer exist code
+
 ## 1.0.1 - 2019-04-06
 
 ### Added

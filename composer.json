@@ -1,7 +1,7 @@
 {
     "name": "dominikb/composer-license-checker",
-    "description": "Utility to check for used licenses and screen them.",
-    "version": "1.0.1",
+    "description": "Utility to check for licenses of dependencies and block/allow them.",
+    "version": "2.0.0",
     "keywords": [
         "dominikb",
         "composer-license-checker"
@@ -11,7 +11,7 @@
     "type": "library",
     "authors": [
         {
-            "name": "dominik",
+            "name": "Dominik Bauernfeind",
             "email": "bauernfeind.dominik@gmail.com",
             "role": "Developer"
         }

@@ -48,13 +48,13 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
                 realpath('./vendor/bin/composer')
             ),
             new InputOption(
-                'whitelist',
-                'w',
+                'allowlist',
+                'a',
                 InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                 'Set a license you want to permit for usage'
             ),
             new InputOption(
-                'blacklist',
+                'blocklist',
                 'b',
                 InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                 'Mark a specific license prohibited for usage'
@@ -65,7 +65,7 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
     /**
      * @throws CommandExecutionException
      */
-    public function execute(InputInterface $input, OutputInterface $output): void
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->logger = new ConsoleLogger($output);
         $this->io = new SymfonyStyle($input, $output);
@@ -82,13 +82,15 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
         $this->io->writeln(count($dependencies).' dependencies were found ...');
         $this->io->newLine();
 
-        $violations = $this->determineViolations($dependencies, $input->getOption('blacklist'), $input->getOption('whitelist'));
+        $violations = $this->determineViolations($dependencies, $input->getOption('blocklist'), $input->getOption('allowlist'));
 
         try {
             $this->handleViolations($violations);
             $this->io->success('Command finished successfully. No violations detected!');
+            return 0;
         } catch (CommandExecutionException $exception) {
             $this->io->error($exception->getMessage());
+            return 1;
         }
     }
 
@@ -106,10 +108,10 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
         }
     }
 
-    private function determineViolations(array $dependencies, array $blacklist, array $whitelist): array
+    private function determineViolations(array $dependencies, array $blocklist, array $allowlist): array
     {
-        $this->licenseConstraintHandler->setBlacklist($blacklist);
-        $this->licenseConstraintHandler->setWhitelist($whitelist);
+        $this->licenseConstraintHandler->setBlocklist($blocklist);
+        $this->licenseConstraintHandler->setAllowlist($allowlist);
 
         return $this->licenseConstraintHandler->detectViolations($dependencies);
     }
