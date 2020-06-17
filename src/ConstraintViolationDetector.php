@@ -10,19 +10,19 @@ use Dominikb\ComposerLicenseChecker\Exceptions\LogicException;
 class ConstraintViolationDetector implements LicenseConstraintHandler
 {
     /** @var string[] */
-    protected $blacklist = [];
+    protected $blocklist = [];
 
     /** @var string[] */
-    protected $whitelist = [];
+    protected $allowlist = [];
 
-    public function setBlacklist(array $licenses): void
+    public function setBlocklist(array $licenses): void
     {
-        $this->blacklist = $licenses;
+        $this->blocklist = $licenses;
     }
 
-    public function setWhitelist(array $licenses): void
+    public function setAllowlist(array $licenses): void
     {
-        $this->whitelist = $licenses;
+        $this->allowlist = $licenses;
     }
 
     /**
@@ -36,8 +36,8 @@ class ConstraintViolationDetector implements LicenseConstraintHandler
         $this->ensureConfigurationIsValid();
 
         return [
-            $this->detectBlacklistViolation($dependencies),
-            $this->detectWhitelistViolation($dependencies),
+            $this->detectBlocklistViolation($dependencies),
+            $this->detectAllowlistViolation($dependencies),
         ];
     }
 
@@ -46,24 +46,24 @@ class ConstraintViolationDetector implements LicenseConstraintHandler
      */
     public function ensureConfigurationIsValid(): void
     {
-        $overlap = array_intersect($this->blacklist, $this->whitelist);
+        $overlap = array_intersect($this->blocklist, $this->allowlist);
 
         if (count($overlap) > 0) {
             $invalidLicenseConditionals = sprintf('"%s"', implode('", "', $overlap));
-            throw new LogicException("Licenses must not be black- and whitelisted at the same time: ${invalidLicenseConditionals}");
+            throw new LogicException("Licenses must not be on the block- and allowlist at the same time: ${invalidLicenseConditionals}");
         }
     }
 
     /**
      * @param Dependency[] $dependencies
      */
-    private function detectBlacklistViolation(array $dependencies): ConstraintViolation
+    private function detectBlocklistViolation(array $dependencies): ConstraintViolation
     {
-        $violation = new ConstraintViolation('Blacklisted license found!');
+        $violation = new ConstraintViolation('Blocked license found!');
 
-        if (! empty($this->blacklist)) {
+        if (! empty($this->blocklist)) {
             foreach ($dependencies as $dependency) {
-                if ($this->allLicensesOnList($dependency->getLicenses(), $this->blacklist)) {
+                if ($this->allLicensesOnList($dependency->getLicenses(), $this->blocklist)) {
                     $violation->add($dependency);
                 }
             }
@@ -75,13 +75,13 @@ class ConstraintViolationDetector implements LicenseConstraintHandler
     /**
      * @param Dependency[] $dependencies
      */
-    private function detectWhitelistViolation(array $dependencies): ConstraintViolation
+    private function detectAllowlistViolation(array $dependencies): ConstraintViolation
     {
-        $violation = new ConstraintViolation('Non white-listed license found!');
+        $violation = new ConstraintViolation('Unallowed license found!');
 
-        if (! empty($this->whitelist)) {
+        if (! empty($this->allowlist)) {
             foreach ($dependencies as $dependency) {
-                if (! $this->anyLicenseOnList($dependency->getLicenses(), $this->whitelist)) {
+                if (! $this->anyLicenseOnList($dependency->getLicenses(), $this->allowlist)) {
                     $violation->add($dependency);
                 }
             }
