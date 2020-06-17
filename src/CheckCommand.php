@@ -2,20 +2,20 @@
 
 namespace Dominikb\ComposerLicenseChecker;
 
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Logger\ConsoleLogger;
-use Symfony\Component\Console\Input\InputDefinition;
-use Symfony\Component\Console\Output\OutputInterface;
-use Dominikb\ComposerLicenseChecker\Contracts\LicenseLookupAware;
-use Dominikb\ComposerLicenseChecker\Traits\LicenseLookupAwareTrait;
 use Dominikb\ComposerLicenseChecker\Contracts\DependencyLoaderAware;
 use Dominikb\ComposerLicenseChecker\Contracts\LicenseConstraintAware;
+use Dominikb\ComposerLicenseChecker\Contracts\LicenseLookupAware;
+use Dominikb\ComposerLicenseChecker\Exceptions\CommandExecutionException;
 use Dominikb\ComposerLicenseChecker\Traits\DependencyLoaderAwareTrait;
 use Dominikb\ComposerLicenseChecker\Traits\LicenseConstraintAwareTrait;
-use Dominikb\ComposerLicenseChecker\Exceptions\CommandExecutionException;
+use Dominikb\ComposerLicenseChecker\Traits\LicenseLookupAwareTrait;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputDefinition;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Logger\ConsoleLogger;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Style\SymfonyStyle;
 
 class CheckCommand extends Command implements LicenseLookupAware, LicenseConstraintAware, DependencyLoaderAware
 {
@@ -87,9 +87,11 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
         try {
             $this->handleViolations($violations);
             $this->io->success('Command finished successfully. No violations detected!');
+
             return 0;
         } catch (CommandExecutionException $exception) {
             $this->io->error($exception->getMessage());
+
             return 1;
         }
     }

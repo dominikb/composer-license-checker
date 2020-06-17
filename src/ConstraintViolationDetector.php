@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker;
 
-use Dominikb\ComposerLicenseChecker\Exceptions\LogicException;
 use Dominikb\ComposerLicenseChecker\Contracts\LicenseConstraintHandler;
+use Dominikb\ComposerLicenseChecker\Exceptions\LogicException;
 
 class ConstraintViolationDetector implements LicenseConstraintHandler
 {

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker\Tests;
 
-use Dominikb\ComposerLicenseChecker\Dependency;
 use Dominikb\ComposerLicenseChecker\ConstraintViolation;
-use Dominikb\ComposerLicenseChecker\Exceptions\LogicException;
 use Dominikb\ComposerLicenseChecker\ConstraintViolationDetector;
+use Dominikb\ComposerLicenseChecker\Dependency;
+use Dominikb\ComposerLicenseChecker\Exceptions\LogicException;
 
 class ConstraintViolationDetectorTest extends TestCase
 {
