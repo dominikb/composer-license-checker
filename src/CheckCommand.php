@@ -65,7 +65,7 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
     /**
      * @throws CommandExecutionException
      */
-    public function execute(InputInterface $input, OutputInterface $output): void
+    public function execute(InputInterface $input, OutputInterface $output)
     {
         $this->logger = new ConsoleLogger($output);
         $this->io = new SymfonyStyle($input, $output);
@@ -89,7 +89,10 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
             $this->io->success('Command finished successfully. No violations detected!');
         } catch (CommandExecutionException $exception) {
             $this->io->error($exception->getMessage());
+            return 1;
         }
+        
+        return 0;
     }
 
     /**
