@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker\Contracts;
 
-use Dominikb\ComposerLicenseChecker\Dependency;
 use Dominikb\ComposerLicenseChecker\ConstraintViolation;
+use Dominikb\ComposerLicenseChecker\Dependency;
 
 interface LicenseConstraintHandler
 {
