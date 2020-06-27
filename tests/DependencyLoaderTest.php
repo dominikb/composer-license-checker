@@ -34,6 +34,6 @@ class DependencyLoaderTest extends TestCase
 
         $loader->loadDependencies('./composerpath/composer-binary', '/some/directory');
 
-        $this->assertEquals('./composerpath/composer-binary -d /some/directory licenses', $command);
+        $this->assertEquals('./composerpath/composer-binary licenses -d /some/directory', $command);
     }
 }

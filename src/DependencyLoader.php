@@ -21,7 +21,7 @@ class DependencyLoader implements DependencyLoaderContract
 
     private function runComposerLicenseCommand(string $composer, string $project): array
     {
-        $command = sprintf('%s -d %s licenses', $composer, $project);
+        $command = sprintf('%s licenses -d %s', $composer, $project);
 
         return $this->exec($command);
     }
