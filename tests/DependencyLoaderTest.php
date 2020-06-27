@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker\Tests;
 
-use Mockery;
 use Dominikb\ComposerLicenseChecker\DependencyLoader;
+use Mockery;
 
 class DependencyLoaderTest extends TestCase
 {
@@ -34,6 +34,6 @@ class DependencyLoaderTest extends TestCase
 
         $loader->loadDependencies('./composerpath/composer-binary', '/some/directory');
 
-        $this->assertEquals('./composerpath/composer-binary -d /some/directory licenses', $command);
+        $this->assertEquals('./composerpath/composer-binary licenses -d /some/directory', $command);
     }
 }
