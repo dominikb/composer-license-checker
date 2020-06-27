@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace Dominikb\ComposerLicenseChecker;
 
 use DateTimeImmutable;
-use GuzzleHttp\ClientInterface;
-use Psr\SimpleCache\CacheInterface;
-use GuzzleHttp\Exception\GuzzleException;
-use Symfony\Component\DomCrawler\Crawler;
-use Symfony\Component\Cache\Simple\FilesystemCache;
-use Dominikb\ComposerLicenseChecker\Exceptions\NoLookupPossibleException;
 use Dominikb\ComposerLicenseChecker\Contracts\LicenseLookup as LicenseLookupContract;
+use Dominikb\ComposerLicenseChecker\Exceptions\NoLookupPossibleException;
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\GuzzleException;
+use Psr\SimpleCache\CacheInterface;
+use Symfony\Component\Cache\Simple\FilesystemCache;
+use Symfony\Component\DomCrawler\Crawler;
 
 class LicenseLookup implements LicenseLookupContract
 {
