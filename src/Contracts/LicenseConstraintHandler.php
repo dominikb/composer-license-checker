@@ -9,9 +9,9 @@ use Dominikb\ComposerLicenseChecker\Dependency;
 
 interface LicenseConstraintHandler
 {
-    public function setBlacklist(array $licenses): void;
+    public function setBlocklist(array $licenses): void;
 
-    public function setWhitelist(array $licenses): void;
+    public function setAllowlist(array $licenses): void;
 
     /**
      * @param Dependency[] $dependencies

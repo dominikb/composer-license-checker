@@ -22,19 +22,19 @@ class ConstraintViolationDetectorTest extends TestCase
     }
 
     /** @test */
-    public function it_throws_a_logic_exception_given_an_overlap_between_black_and_whitelist()
+    public function it_throws_a_logic_exception_given_an_overlap_between_block_and_allowlist()
     {
-        $this->detector->setWhitelist(['MIT', 'other-license']);
-        $this->detector->setBlacklist(['MIT', 'another-license']);
+        $this->detector->setAllowlist(['MIT', 'other-license']);
+        $this->detector->setBlocklist(['MIT', 'another-license']);
 
         $this->expectException(LogicException::class);
         $this->detector->detectViolations([]);
     }
 
     /** @test */
-    public function given_a_single_license_on_the_blacklist_it_detects_a_violation()
+    public function given_a_single_license_on_the_blocklist_it_detects_a_violation()
     {
-        $this->detector->setBlacklist(['MIT']);
+        $this->detector->setBlocklist(['MIT']);
 
         $dependency = (new Dependency)->setLicenses(['MIT']);
 
@@ -44,9 +44,9 @@ class ConstraintViolationDetectorTest extends TestCase
     }
 
     /** @test */
-    public function given_a_subset_of_blacklisted_licenses_no_violation_is_detected()
+    public function given_a_subset_of_blocklisted_licenses_no_violation_is_detected()
     {
-        $this->detector->setBlacklist(['MIT']);
+        $this->detector->setBlocklist(['MIT']);
 
         $dependency = (new Dependency)->setLicenses(['MIT', 'BSD']);
 
@@ -56,11 +56,11 @@ class ConstraintViolationDetectorTest extends TestCase
     }
 
     /** @test */
-    public function given_a_non_white_listed_license_a_violation_is_detected()
+    public function given_a_non_allow_listed_license_a_violation_is_detected()
     {
-        $this->detector->setWhitelist(['MIT']);
+        $this->detector->setAllowlist(['MIT']);
 
-        $dependency = (new Dependency)->setLicenses(['not-white-listed']);
+        $dependency = (new Dependency)->setLicenses(['not-allow-listed']);
 
         $this->assertViolationFound(
             $this->detector->detectViolations([$dependency])
@@ -68,9 +68,9 @@ class ConstraintViolationDetectorTest extends TestCase
     }
 
     /** @test */
-    public function given_at_least_one_whitelisted_licenses_no_violation_is_detected()
+    public function given_at_least_one_allowlisted_license_no_violation_is_detected()
     {
-        $this->detector->setWhitelist(['MIT']);
+        $this->detector->setAllowlist(['MIT']);
 
         $dependency = (new Dependency)->setLicenses(['violation', 'MIT']);
 
