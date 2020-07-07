@@ -50,7 +50,7 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
         ]));
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $dependencies = $this->dependencyLoader->loadDependencies(
             $input->getOption('composer'),
@@ -64,6 +64,8 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
 
         /* @var License $license */
         $this->outputFormattedLicenses($output, $licenses, $groupedByName);
+
+        return 0;
     }
 
     /**
