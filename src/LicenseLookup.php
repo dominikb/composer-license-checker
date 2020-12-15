@@ -10,7 +10,7 @@ use Dominikb\ComposerLicenseChecker\Exceptions\NoLookupPossibleException;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
 use Psr\SimpleCache\CacheInterface;
-use Symfony\Component\Cache\Simple\FilesystemCache;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\DomCrawler\Crawler;
 
 class LicenseLookup implements LicenseLookupContract
@@ -30,7 +30,7 @@ class LicenseLookup implements LicenseLookupContract
     public function __construct(ClientInterface $http, CacheInterface $cache = null)
     {
         $this->http = $http;
-        $this->cache = $cache ?? new FilesystemCache('LicenseLookup', 3600, __DIR__.'/../.cache');
+        $this->cache = $cache ?? new FilesystemAdapter('FilesystemCache', 3600, __DIR__.'/../.cache');
     }
 
     public function lookUp(string $licenseName): License
