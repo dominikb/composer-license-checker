@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker\Contracts;
 
-use Psr\SimpleCache\CacheInterface;
+use Symfony\Contracts\Cache\CacheInterface;
 
 interface CacheAwareContract
 {
