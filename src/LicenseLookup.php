@@ -38,12 +38,12 @@ class LicenseLookup implements LicenseLookupContract
         return $this->cache->get($licenseName, function () use ($licenseName) {
             try {
                 $detailsPageUrl = $this->queryForDetailPageUrl($licenseName);
-    
+
                 $license = $this->resolveLicenseInformation($licenseName, $detailsPageUrl);
             } catch (NoLookupPossibleException $exception) {
                 $license = new NoLookupLicenses($licenseName);
             }
-    
+
             return $license;
         });
     }
