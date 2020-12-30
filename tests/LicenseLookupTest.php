@@ -11,7 +11,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
-use Symfony\Component\Cache\Simple\NullCache;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 
 class LicenseLookupTest extends TestCase
 {
@@ -29,7 +29,7 @@ class LicenseLookupTest extends TestCase
         ]);
         $client = new Client(['handler' => HandlerStack::create($handler)]);
 
-        $lookup = new LicenseLookup($client, new NullCache);
+        $lookup = new LicenseLookup($client, new NullAdapter);
 
         $res = $lookup->lookUp('Apache-2.0');
 
@@ -41,7 +41,7 @@ class LicenseLookupTest extends TestCase
     {
         $handler = new MockHandler([]);
         $client = new Client(['handler' => HandlerStack::create($handler)]);
-        $lookup = new LicenseLookup($client, new NullCache);
+        $lookup = new LicenseLookup($client, new NullAdapter);
 
         $resultForNone = $lookup->lookUp('none');
         $resultForProprietary = $lookup->lookUp('proprietary');
@@ -61,7 +61,7 @@ class LicenseLookupTest extends TestCase
             new Response(500),
         ]);
         $client = new Client(['handler' => HandlerStack::create($handler)]);
-        $lookup = new LicenseLookup($client, new NullCache);
+        $lookup = new LicenseLookup($client, new NullAdapter);
 
         $license = $lookup->lookUp('Apache-2.0');
 
@@ -75,7 +75,7 @@ class LicenseLookupTest extends TestCase
             new Response(500),
         ]);
         $client = new Client(['handler' => HandlerStack::create($handler)]);
-        $lookup = new LicenseLookup($client, new NullCache);
+        $lookup = new LicenseLookup($client, new NullAdapter);
 
         $license = $lookup->lookUp('Apache-2.0');
 

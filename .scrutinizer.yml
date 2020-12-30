@@ -28,6 +28,6 @@ build:
                 override:
                     - command: composer test-coverage
                       coverage:
-                          file: build/logs/clover.xml
+                          file: build/logs/coverage.xml
                           format: clover
 
