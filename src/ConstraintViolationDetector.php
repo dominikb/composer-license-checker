@@ -30,8 +30,9 @@ class ConstraintViolationDetector implements LicenseConstraintHandler
 
     public function allow($dependencies): void
     {
-        if (! is_array($dependencies))
+        if (! is_array($dependencies)) {
             $dependencies = [$dependencies];
+        }
 
         foreach ($dependencies as $allowed) {
             $this->alwaysAllowed[] = $allowed;
@@ -124,14 +125,16 @@ class ConstraintViolationDetector implements LicenseConstraintHandler
     {
         $possiblyViolating = [];
 
-        if (empty($this->alwaysAllowed))
+        if (empty($this->alwaysAllowed)) {
             return $dependencies;
+        }
 
         foreach ($dependencies as $dependency) {
-
-            foreach ($this->alwaysAllowed as $allowedDependency)
-                if ($this->matches($allowedDependency, $dependency))
+            foreach ($this->alwaysAllowed as $allowedDependency) {
+                if ($this->matches($allowedDependency, $dependency)) {
                     continue 2; // Outer for: test next dependency
+                }
+            }
 
             $possiblyViolating[] = $dependency;
         }
@@ -150,13 +153,17 @@ class ConstraintViolationDetector implements LicenseConstraintHandler
      */
     private function matches(Dependency $original, Dependency $tryMatch): bool
     {
-        if ($original->getAuthorName())
-            if (! ($original->getAuthorName() === $tryMatch->getAuthorName()))
+        if ($original->getAuthorName()) {
+            if (! ($original->getAuthorName() === $tryMatch->getAuthorName())) {
                 return false;
+            }
+        }
 
-        if ($original->getPackageName())
-            if(! ($original->getPackageName() === $tryMatch->getPackageName()))
+        if ($original->getPackageName()) {
+            if (! ($original->getPackageName() === $tryMatch->getPackageName())) {
                 return false;
+            }
+        }
 
         return true;
     }

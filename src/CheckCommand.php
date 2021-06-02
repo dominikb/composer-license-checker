@@ -125,7 +125,7 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
         $this->licenseConstraintHandler->setBlocklist($blocklist);
         $this->licenseConstraintHandler->setAllowlist($allowlist);
 
-        $this->licenseConstraintHandler->allow(array_map(function($dependency) {
+        $this->licenseConstraintHandler->allow(array_map(function ($dependency) {
             return new Dependency($dependency);
         }, $allowed));
 

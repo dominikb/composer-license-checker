@@ -22,13 +22,12 @@ class Dependency
      * @param string   $version
      * @param string[] $licenses
      */
-    public function __construct(string $name = "", string $version = "", array $licenses = [])
+    public function __construct(string $name = '', string $version = '', array $licenses = [])
     {
         $this->name = $name;
         $this->version = $version;
         $this->licenses = $licenses;
     }
-
 
     /**
      * @return string
@@ -93,7 +92,9 @@ class Dependency
     {
         $parts = explode('/', $this->name);
 
-        if (count($parts) != 2) return "";
+        if (count($parts) != 2) {
+            return '';
+        }
 
         return $parts[1];
     }
