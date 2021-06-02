@@ -2,6 +2,11 @@
 
 All notable changes to `composer-license-checker` will be documented in this file
 
+## 2.2.0 - 2021-06-02
+
+### Added
+- __--allow__ option to always allow a specific package or author/vendor
+
 ## 2.1.0 - 2020-12-31
 
 ### Added

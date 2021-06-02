@@ -59,6 +59,12 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
                 InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
                 'Mark a specific license prohibited for usage'
             ),
+            new InputOption(
+              'allow',
+              '',
+              InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
+              'Determine a vendor or package to always be allowed and never trigger violations'
+            ),
         ]));
     }
 
@@ -82,7 +88,11 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
         $this->io->writeln(count($dependencies).' dependencies were found ...');
         $this->io->newLine();
 
-        $violations = $this->determineViolations($dependencies, $input->getOption('blocklist'), $input->getOption('allowlist'));
+        $violations = $this->determineViolations($dependencies,
+            $input->getOption('blocklist'),
+            $input->getOption('allowlist'),
+            $input->getOption('allow')
+        );
 
         try {
             $this->handleViolations($violations);
@@ -110,10 +120,14 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
         }
     }
 
-    private function determineViolations(array $dependencies, array $blocklist, array $allowlist): array
+    private function determineViolations(array $dependencies, array $blocklist, array $allowlist, array $allowed): array
     {
         $this->licenseConstraintHandler->setBlocklist($blocklist);
         $this->licenseConstraintHandler->setAllowlist($allowlist);
+
+        $this->licenseConstraintHandler->allow(array_map(function ($dependency) {
+            return new Dependency($dependency);
+        }, $allowed));
 
         return $this->licenseConstraintHandler->detectViolations($dependencies);
     }

@@ -24,6 +24,9 @@ build:
                 override:
                     - php-scrutinizer-run
         coverage:
+            environment:
+                variables:
+                    XDEBUG_MODE: coverage
             tests:
                 override:
                     - command: composer test-coverage

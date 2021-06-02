@@ -8,7 +8,7 @@ use Dominikb\ComposerLicenseChecker\Contracts\DependencyLoaderAware;
 use Dominikb\ComposerLicenseChecker\Contracts\LicenseLookupAware;
 use Dominikb\ComposerLicenseChecker\Traits\DependencyLoaderAwareTrait;
 use Dominikb\ComposerLicenseChecker\Traits\LicenseLookupAwareTrait;
-use Symfony\Component\Cache\Simple\NullCache;
+use Symfony\Component\Cache\Adapter\NullAdapter;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -19,8 +19,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ReportCommand extends Command implements LicenseLookupAware, DependencyLoaderAware
 {
     use LicenseLookupAwareTrait, DependencyLoaderAwareTrait;
-
-    const LINES_BEFORE_DEPENDENCY_VERSIONS = 2;
 
     protected static $defaultName = 'report';
 
@@ -92,7 +90,7 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
     private function lookUpLicenses(array $licenses, OutputInterface $output, $useCache = true)
     {
         if (! $useCache) {
-            $this->licenseLookup->setCache(new NullCache);
+            $this->licenseLookup->setCache(new NullAdapter);
         }
 
         $lookedUp = [];

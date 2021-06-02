@@ -15,6 +15,9 @@ class ConstraintViolationDetector implements LicenseConstraintHandler
     /** @var string[] */
     protected $allowlist = [];
 
+    /** @var Dependency[] */
+    private $alwaysAllowed = [];
+
     public function setBlocklist(array $licenses): void
     {
         $this->blocklist = $licenses;
@@ -23,6 +26,17 @@ class ConstraintViolationDetector implements LicenseConstraintHandler
     public function setAllowlist(array $licenses): void
     {
         $this->allowlist = $licenses;
+    }
+
+    public function allow($dependencies): void
+    {
+        if (! is_array($dependencies)) {
+            $dependencies = [$dependencies];
+        }
+
+        foreach ($dependencies as $allowed) {
+            $this->alwaysAllowed[] = $allowed;
+        }
     }
 
     /**
@@ -35,9 +49,11 @@ class ConstraintViolationDetector implements LicenseConstraintHandler
     {
         $this->ensureConfigurationIsValid();
 
+        $possibleViolators = $this->exceptAllowed($dependencies);
+
         return [
-            $this->detectBlocklistViolation($dependencies),
-            $this->detectAllowlistViolation($dependencies),
+            $this->detectBlocklistViolation($possibleViolators),
+            $this->detectAllowlistViolation($possibleViolators),
         ];
     }
 
@@ -98,5 +114,57 @@ class ConstraintViolationDetector implements LicenseConstraintHandler
     private function anyLicenseOnList(array $licenses, array $list): bool
     {
         return count(array_intersect($licenses, $list)) > 0;
+    }
+
+    /**
+     * @param Dependency[] $dependencies
+     *
+     * @return Dependency[]
+     */
+    private function exceptAllowed(array $dependencies): array
+    {
+        $possiblyViolating = [];
+
+        if (empty($this->alwaysAllowed)) {
+            return $dependencies;
+        }
+
+        foreach ($dependencies as $dependency) {
+            foreach ($this->alwaysAllowed as $allowedDependency) {
+                if ($this->matches($allowedDependency, $dependency)) {
+                    continue 2; // Outer for: test next dependency
+                }
+            }
+
+            $possiblyViolating[] = $dependency;
+        }
+
+        return $possiblyViolating;
+    }
+
+    /**
+     * Determine if the $original author and package name match for $tryMatch.
+     * An empty string for either the author or package gets interpreted as a wilcard.
+     *
+     * @param Dependency $original
+     * @param Dependency $tryMatch
+     *
+     * @return bool
+     */
+    private function matches(Dependency $original, Dependency $tryMatch): bool
+    {
+        if ($original->getAuthorName()) {
+            if (! ($original->getAuthorName() === $tryMatch->getAuthorName())) {
+                return false;
+            }
+        }
+
+        if ($original->getPackageName()) {
+            if (! ($original->getPackageName() === $tryMatch->getPackageName())) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

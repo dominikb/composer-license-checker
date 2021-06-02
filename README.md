@@ -28,7 +28,10 @@ Two separate commands are provided:
 Use `./composer-license-checker help` to get info about general usage or use the syntax `./composer-license-checker help COMMAND_NAME` to see more information about a specific command available. 
 
 ``` bash
-vendor/bin/composer-license-checker check --allowlist MIT
+./vendor/bin/composer-license-checker check \
+        --allowlist MIT \ # Fail if anything but MIT license is used
+        --blocklist GPL \ # Fail if any dependency uses GPL
+        --allow dominikb/composer-license-checker # Always allow this dependency regardless of its license
 
 vendor/bin/composer-license-checker report -p /path/to/your/project -c /path/to/composer.phar
 ```

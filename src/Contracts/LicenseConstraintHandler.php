@@ -14,6 +14,11 @@ interface LicenseConstraintHandler
     public function setAllowlist(array $licenses): void;
 
     /**
+     * @param Dependency[]|Dependency $dependencies
+     */
+    public function allow($dependencies): void;
+
+    /**
      * @param Dependency[] $dependencies
      *
      * @return ConstraintViolation[]

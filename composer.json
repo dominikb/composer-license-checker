@@ -1,7 +1,7 @@
 {
     "name": "dominikb/composer-license-checker",
     "description": "Utility to check for licenses of dependencies and block/allow them.",
-    "version": "2.1.0",
+    "version": "2.2.0",
     "keywords": [
         "dominikb",
         "composer-license-checker"
@@ -18,7 +18,7 @@
     ],
     "require": {
         "php": "^7.3|^8.0",
-        "composer/composer": "^1.8|^2.0",
+        "composer/composer": ">=1.10.22|>=2.0.13",
         "guzzlehttp/guzzle": "^6.3|^7.2",
         "psr/simple-cache": "^1.0",
         "symfony/cache": "^4.2.3|^5.2",

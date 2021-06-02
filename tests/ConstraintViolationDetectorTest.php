@@ -79,6 +79,32 @@ class ConstraintViolationDetectorTest extends TestCase
         );
     }
 
+    /** @test */
+    public function given_an_allowed_package_its_license_does_not_trigger_a_violation()
+    {
+        $dependency = new Dependency('dominikb/composer-license-checker', '2.1.0', ['MIT']);
+
+        $this->detector->allow($dependency);
+        $this->detector->setBlocklist(['MIT']);
+
+        $this->assertViolationNotFound($this->detector->detectViolations([$dependency]));
+    }
+
+    /** @test */
+    public function given_an_allowed_package_author_non_of_its_dependencies_trigger_a_violation()
+    {
+        $this->detector->allow(new Dependency('dominikb'));
+        $this->detector->setAllowlist(['GPL']);
+        $this->detector->setBlocklist(['MIT']);
+
+        $dependencies = [
+            new Dependency('dominikb/composer-license-checker', '2.1.0', ['MIT']),
+            new Dependency('dominikb/another-package', '0.0.1', ['MIT']),
+        ];
+
+        $this->assertViolationNotFound($this->detector->detectViolations($dependencies));
+    }
+
     /**
      * @param ConstraintViolation[] $violations
      */
