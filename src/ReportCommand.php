@@ -20,8 +20,6 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
 {
     use LicenseLookupAwareTrait, DependencyLoaderAwareTrait;
 
-    const LINES_BEFORE_DEPENDENCY_VERSIONS = 2;
-
     protected static $defaultName = 'report';
 
     protected function configure()
