@@ -40,9 +40,9 @@ class ConstraintViolationDetector implements LicenseConstraintHandler
     }
 
     /**
-     * @param Dependency[] $dependencies
-     *
+     * @param  Dependency[]  $dependencies
      * @return ConstraintViolation[]
+     *
      * @throws LogicException
      */
     public function detectViolations(array $dependencies): array
@@ -71,7 +71,7 @@ class ConstraintViolationDetector implements LicenseConstraintHandler
     }
 
     /**
-     * @param Dependency[] $dependencies
+     * @param  Dependency[]  $dependencies
      */
     private function detectBlocklistViolation(array $dependencies): ConstraintViolation
     {
@@ -89,7 +89,7 @@ class ConstraintViolationDetector implements LicenseConstraintHandler
     }
 
     /**
-     * @param Dependency[] $dependencies
+     * @param  Dependency[]  $dependencies
      */
     private function detectAllowlistViolation(array $dependencies): ConstraintViolation
     {
@@ -117,8 +117,7 @@ class ConstraintViolationDetector implements LicenseConstraintHandler
     }
 
     /**
-     * @param Dependency[] $dependencies
-     *
+     * @param  Dependency[]  $dependencies
      * @return Dependency[]
      */
     private function exceptAllowed(array $dependencies): array
@@ -146,9 +145,8 @@ class ConstraintViolationDetector implements LicenseConstraintHandler
      * Determine if the $original author and package name match for $tryMatch.
      * An empty string for either the author or package gets interpreted as a wilcard.
      *
-     * @param Dependency $original
-     * @param Dependency $tryMatch
-     *
+     * @param  Dependency  $original
+     * @param  Dependency  $tryMatch
      * @return bool
      */
     private function matches(Dependency $original, Dependency $tryMatch): bool

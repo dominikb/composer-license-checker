@@ -67,8 +67,7 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
     }
 
     /**
-     * @param Dependency[] $dependencies
-     *
+     * @param  Dependency[]  $dependencies
      * @return array
      */
     private function groupDependenciesByLicense(array $dependencies)
@@ -103,9 +102,9 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
     }
 
     /**
-     * @param OutputInterface $output
-     * @param License[]       $licenses
-     * @param array           $groupedByName
+     * @param  OutputInterface  $output
+     * @param  License[]  $licenses
+     * @param  array  $groupedByName
      */
     protected function outputFormattedLicenses(OutputInterface $output, array $licenses, array $groupedByName): void
     {

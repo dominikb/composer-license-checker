@@ -133,7 +133,7 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
     }
 
     /**
-     * @param ConstraintViolation[] $violations
+     * @param  ConstraintViolation[]  $violations
      *
      *@throws CommandExecutionException
      */
@@ -155,7 +155,7 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
     }
 
     /**
-     * @param Dependency[] $violators
+     * @param  Dependency[]  $violators
      */
     private function reportViolators(array $violators): void
     {

@@ -106,7 +106,7 @@ class ConstraintViolationDetectorTest extends TestCase
     }
 
     /**
-     * @param ConstraintViolation[] $violations
+     * @param  ConstraintViolation[]  $violations
      */
     private function assertViolationFound(array $violations)
     {
@@ -120,7 +120,7 @@ class ConstraintViolationDetectorTest extends TestCase
     }
 
     /**
-     * @param ConstraintViolation[] $violations
+     * @param  ConstraintViolation[]  $violations
      */
     private function assertViolationNotFound(array $violations)
     {
