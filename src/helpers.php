@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 if (! function_exists('array_map_keys')) {
     /**
-     * @param array    $input
-     * @param callable $callback
-     *
+     * @param  array  $input
+     * @param  callable  $callback
      * @return array
      */
     function array_map_keys($input, $callback)

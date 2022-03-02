@@ -99,10 +99,10 @@ class DependencyParserTest extends TestCase
     }
 
     /**
-     * @param Dependency      $dependency
-     * @param string          $name
-     * @param string          $version
-     * @param string[]        $licenses
+     * @param  Dependency  $dependency
+     * @param  string  $name
+     * @param  string  $version
+     * @param  string[]  $licenses
      */
     private function assertDependencyMatches(Dependency $dependency, string $name, string $version, ...$licenses)
     {

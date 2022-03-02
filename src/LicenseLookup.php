@@ -49,9 +49,9 @@ class LicenseLookup implements LicenseLookupContract
     }
 
     /**
-     * @param string $licenseShortName
-     *
+     * @param  string  $licenseShortName
      * @return string
+     *
      * @throws NoLookupPossibleException
      */
     private function queryForDetailPageUrl(string $licenseShortName): string
@@ -86,10 +86,10 @@ class LicenseLookup implements LicenseLookupContract
     }
 
     /**
-     * @param string $licenseShortName
-     * @param string $detailsPageUrl
-     *
+     * @param  string  $licenseShortName
+     * @param  string  $detailsPageUrl
      * @return License
+     *
      * @throws NoLookupPossibleException
      */
     private function resolveLicenseInformation(string $licenseShortName, string $detailsPageUrl): License
@@ -146,9 +146,8 @@ class LicenseLookup implements LicenseLookupContract
     /**
      * Find the best matching link by comparing the similarity of the link and text.
      *
-     * @param array  $zipped
-     * @param string $licenseShortName
-     *
+     * @param  array  $zipped
+     * @param  string  $licenseShortName
      * @return string
      */
     private function findBestMatch(array $zipped, string $licenseShortName): string

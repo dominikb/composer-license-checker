@@ -35,8 +35,7 @@ class License
     }
 
     /**
-     * @param string $shortName
-     *
+     * @param  string  $shortName
      * @return License
      */
     public function setShortName(string $shortName): self
@@ -55,8 +54,7 @@ class License
     }
 
     /**
-     * @param string[] $can
-     *
+     * @param  string[]  $can
      * @return License
      */
     public function setCan(array $can): self
@@ -75,8 +73,7 @@ class License
     }
 
     /**
-     * @param string[] $cannot
-     *
+     * @param  string[]  $cannot
      * @return License
      */
     public function setCannot(array $cannot): self
@@ -95,8 +92,7 @@ class License
     }
 
     /**
-     * @param string[] $must
-     *
+     * @param  string[]  $must
      * @return License
      */
     public function setMust(array $must): self
@@ -115,8 +111,7 @@ class License
     }
 
     /**
-     * @param string $source
-     *
+     * @param  string  $source
      * @return License
      */
     public function setSource(string $source): self
@@ -135,8 +130,7 @@ class License
     }
 
     /**
-     * @param DateTimeInterface $createdAt
-     *
+     * @param  DateTimeInterface  $createdAt
      * @return License
      */
     public function setCreatedAt(DateTimeInterface $createdAt): self
