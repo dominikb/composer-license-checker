@@ -2,6 +2,12 @@
 
 All notable changes to `composer-license-checker` will be documented in this file
 
+## 2.3.0 - 2022-03-02
+
+### Change
+- Composer: allow for `psr/simple-cache` versions 2 and 3
+- Allow for `v6` of all symfony dependencies
+
 ## 2.2.0 - 2021-06-02
 
 ### Added
