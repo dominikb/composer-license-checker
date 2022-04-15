@@ -49,7 +49,7 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
                 'show-packages',
                 null,
                 InputOption::VALUE_NONE,
-                'Shows the packages for the license.'
+                'Shows the packages for each license.'
             ),
         ]));
     }
@@ -81,7 +81,6 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
         $grouped = [];
 
         foreach ($dependencies as $dependency) {
-
             [$license] = $dependency->getLicenses();
 
             if (! isset($grouped[$license])) {
@@ -109,15 +108,14 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
     }
 
     /**
-     * @param OutputInterface $output
-     * @param InputInterface $input
-     * @param License[] $licenses
-     * @param array $groupedByName
+     * @param  OutputInterface $output
+     * @param  InputInterface $input
+     * @param  License[] $licenses
+     * @param  array $groupedByName
      */
     protected function outputFormattedLicenses(OutputInterface $output, InputInterface $input, array $licenses, array $groupedByName): void
     {
         foreach ($licenses as $license) {
-
             $dependencies = $groupedByName[$license->getShortName()];
 
             $usageCount = count($dependencies);
