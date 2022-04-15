@@ -135,7 +135,7 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
                 }, $licenses);
 
                 if (! in_array($license->getShortName(), $licenses)) {
-                    $output->writeln(sprintf("Skipped %s", $license->getShortName()), OutputInterface::VERBOSITY_VERY_VERBOSE);
+                    $output->writeln(sprintf('Skipped %s', $license->getShortName()), OutputInterface::VERBOSITY_VERY_VERBOSE);
                     continue;
                 }
             }
