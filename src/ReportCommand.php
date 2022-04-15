@@ -51,6 +51,18 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
                 InputOption::VALUE_NONE,
                 'Shows the packages for each license.'
             ),
+            new InputOption(
+                'grouped',
+                null,
+                InputOption::VALUE_NONE,
+                'Display the packages grouped.'
+            ),
+            new InputOption(
+                'filter',
+                null,
+                InputOption::VALUE_REQUIRED,
+                'Filter for specific licences.'
+            ),
         ]));
     }
 
@@ -116,6 +128,19 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
     protected function outputFormattedLicenses(OutputInterface $output, InputInterface $input, array $licenses, array $groupedByName): void
     {
         foreach ($licenses as $license) {
+
+            if ($input->getOption('filter')) {
+                $licenses = explode(',', $input->getOption('filter'));
+                $licenses = array_map(function ($licence) {
+                    return trim($licence);
+                }, $licenses);
+
+                if (!in_array($license->getShortName(), $licenses)) {
+                    $output->writeln(sprintf("Skipped %s", $license->getShortName()), OutputInterface::VERBOSITY_VERY_VERBOSE);
+                    continue;
+                }
+            }
+
             $dependencies = $groupedByName[$license->getShortName()];
 
             $usageCount = count($dependencies);
@@ -153,13 +178,21 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
 
             if ($input->getOption('show-packages') || $output->isVerbose()) {
                 $output->writeln('');
-                $packages = [];
-                foreach ($dependencies as $dependency) {
-                    $packages[] = $dependency->getName();
+
+                if ($input->getOption('grouped')) {
+                    $output->write('packages: ');
+                    $packages = [];
+                    foreach ($dependencies as $dependency) {
+                        $packages[] = $dependency->getName();
+                    }
+
+                    $output->write(implode(', ', $packages));
+                    continue;
                 }
 
-                sort($packages);
-                $output->writeln(sprintf('packages: %s', implode(', ', $packages)));
+                foreach ($dependencies as $dependency) {
+                    $output->writeln(sprintf('%s (%s)', $dependency->getName(), $dependency->getVersion()));
+                }
             }
         }
     }
