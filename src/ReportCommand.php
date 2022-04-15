@@ -108,10 +108,10 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
     }
 
     /**
-     * @param  OutputInterface $output
-     * @param  InputInterface $input
-     * @param  License[] $licenses
-     * @param  array $groupedByName
+     * @param  OutputInterface  $output
+     * @param  InputInterface  $input
+     * @param  License[]  $licenses
+     * @param  array  $groupedByName
      */
     protected function outputFormattedLicenses(OutputInterface $output, InputInterface $input, array $licenses, array $groupedByName): void
     {
