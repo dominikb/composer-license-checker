@@ -128,14 +128,13 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
     protected function outputFormattedLicenses(OutputInterface $output, InputInterface $input, array $licenses, array $groupedByName): void
     {
         foreach ($licenses as $license) {
-
             if ($input->getOption('filter')) {
                 $licenses = explode(',', $input->getOption('filter'));
                 $licenses = array_map(function ($licence) {
                     return trim($licence);
                 }, $licenses);
 
-                if (!in_array($license->getShortName(), $licenses)) {
+                if (! in_array($license->getShortName(), $licenses)) {
                     $output->writeln(sprintf("Skipped %s", $license->getShortName()), OutputInterface::VERBOSITY_VERY_VERBOSE);
                     continue;
                 }
