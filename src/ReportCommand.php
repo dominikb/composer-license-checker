@@ -189,6 +189,7 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
 
     /**
      * Generates a output string for the 'show-packages' option.
+     *
      * @param  InputInterface  $input
      * @param  array  $dependencies
      * @return string
