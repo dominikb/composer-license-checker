@@ -68,7 +68,7 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        if ($input->getOption('grouped') && !$input->getOption('show-packages')) {
+        if ($input->getOption('grouped') && ! $input->getOption('show-packages')) {
             throw new \InvalidArgumentException('The option "grouped" is only allowed with "show-packages" option');
         }
 
@@ -188,9 +188,9 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
     }
 
     /**
-     * Generates a output string for the 'show-packages' option
-     * @param InputInterface $input
-     * @param array $dependencies
+     * Generates a output string for the 'show-packages' option.
+     * @param  InputInterface  $input
+     * @param  array  $dependencies
      * @return string
      */
     protected function outputFormatPackages(InputInterface $input, array $dependencies): string
@@ -201,7 +201,7 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
                 $packages[] = $dependency->getName();
             }
 
-            return 'packages: ' . implode(', ', $packages);
+            return 'packages: '.implode(', ', $packages);
         }
 
         foreach ($dependencies as $dependency) {
