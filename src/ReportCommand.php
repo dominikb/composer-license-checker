@@ -80,7 +80,8 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
         $groupedByName = $this->groupDependenciesByLicense($dependencies);
 
         $shouldCache = ! $input->getOption('no-cache');
-        $licenses = $this->lookUpLicenses(array_keys($groupedByName), $input, $output, $shouldCache);
+        $licenses = $this->filterLicenses(array_keys($groupedByName), $input->getOption('filter'));
+        $licenses = $this->lookUpLicenses($licenses, $output, $shouldCache);
 
         /* @var License $license */
         $this->outputFormattedLicenses($output, $input, $licenses, $groupedByName);
@@ -88,10 +89,10 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
         return 0;
     }
 
-    private function isValidLicenseByFilter(string $licence, InputInterface $input): bool
+    private function isValidLicenseByFilter(string $licence, array $filters): bool
     {
-        if ($input->getOption('filter') !== []) {
-            return in_array(strtolower($licence), array_map('strtolower', $input->getOption('filter')));
+        if ($filters !== []) {
+            return in_array(strtolower($licence), array_map('strtolower', $filters));
         }
 
         return true;
@@ -117,7 +118,23 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
         return $grouped;
     }
 
-    private function lookUpLicenses(array $licenses, InputInterface $input, OutputInterface $output, $useCache = true): array
+    private function filterLicenses(array $licences, array $filters): array
+    {
+        if ($filters === []) {
+            return $licences;
+        }
+
+        $validLicences = [];
+        foreach ($licences as $license) {
+            if ($this->isValidLicenseByFilter($license, $filters)) {
+                $validLicences[] = $license;
+            }
+        }
+
+        return $validLicences;
+    }
+
+    private function lookUpLicenses(array $licenses, OutputInterface $output, $useCache = true): array
     {
         if (! $useCache) {
             $this->licenseLookup->setCache(new NullAdapter);
@@ -125,10 +142,8 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
 
         $lookedUp = [];
         foreach ($licenses as $license) {
-            if ($this->isValidLicenseByFilter($license, $input)) {
-                $output->writeln("Looking up $license ...");
-                $lookedUp[$license] = $this->licenseLookup->lookUp($license);
-            }
+            $output->writeln("Looking up $license ...");
+            $lookedUp[$license] = $this->licenseLookup->lookUp($license);
         }
 
         return $lookedUp;
@@ -179,10 +194,8 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
             $licenseTable->render();
 
             if ($input->getOption('show-packages') || $output->isVerbose()) {
-                if ($out = $this->outputFormatPackages($input, $dependencies)) {
-                    $output->writeln('');
-                    $output->writeln($out);
-                }
+                $output->writeln('');
+                $output->writeln($this->outputFormatPackages($input, $dependencies));
             }
         }
     }
