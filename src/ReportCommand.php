@@ -77,25 +77,18 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
             $input->getOption('project-path')
         );
 
+        $dependencies = $this->filterLicenses($dependencies, $input->getOption('filter'));
+
         $groupedByName = $this->groupDependenciesByLicense($dependencies);
 
         $shouldCache = ! $input->getOption('no-cache');
-        $licenses = $this->filterLicenses(array_keys($groupedByName), $input->getOption('filter'));
-        $licenses = $this->lookUpLicenses($licenses, $output, $shouldCache);
+
+        $licenses = $this->lookUpLicenses(array_keys($groupedByName), $output, $shouldCache);
 
         /* @var License $license */
         $this->outputFormattedLicenses($output, $input, $licenses, $groupedByName);
 
         return 0;
-    }
-
-    private function isValidLicenseByFilter(string $licence, array $filters): bool
-    {
-        if ($filters !== []) {
-            return in_array(strtolower($licence), array_map('strtolower', $filters));
-        }
-
-        return true;
     }
 
     /**
@@ -118,16 +111,25 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
         return $grouped;
     }
 
-    private function filterLicenses(array $licences, array $filters): array
+    /**
+     * @param  Dependency[]  $dependencies
+     * @param  string[]  $filters
+     * @return array
+     */
+    private function filterLicenses(array $dependencies, array $filters): array
     {
         if ($filters === []) {
-            return $licences;
+            return $dependencies;
         }
 
         $validLicences = [];
-        foreach ($licences as $license) {
-            if ($this->isValidLicenseByFilter($license, $filters)) {
-                $validLicences[] = $license;
+
+        foreach ($dependencies as $dependency) {
+            foreach ($dependency->getLicenses() as $license) {
+                if (in_array(strtolower($license), array_map('strtolower', $filters))) {
+                    $validLicences[] = $dependency;
+                    continue 2;
+                }
             }
         }
 
