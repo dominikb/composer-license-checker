@@ -2,6 +2,14 @@
 
 All notable changes to `composer-license-checker` will be documented in this file
 
+## 2.4.0 - 2022-04-30
+
+### Added
+- __--show-packages__ and __--grouped__ options for the report command ([#22](https://github.com/dominikb/composer-license-checker/pull/22))
+- __--filter__ to restrict queried and displayed licenses ([#22](https://github.com/dominikb/composer-license-checker/pull/22))
+
+Thanks to: [dkemper](https://github.com/dkemper)
+
 ## 2.3.0 - 2022-03-02
 
 ### Change

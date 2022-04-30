@@ -1,7 +1,7 @@
 {
     "name": "dominikb/composer-license-checker",
     "description": "Utility to check for licenses of dependencies and block/allow them.",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "keywords": [
         "dominikb",
         "composer-license-checker"
