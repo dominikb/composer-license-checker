@@ -45,23 +45,48 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
                 InputOption::VALUE_NONE,
                 'Disables caching of license lookups'
             ),
+            new InputOption(
+                'show-packages',
+                null,
+                InputOption::VALUE_NONE,
+                'Shows the packages for each license.'
+            ),
+            new InputOption(
+                'grouped',
+                null,
+                InputOption::VALUE_NONE,
+                'Display the packages grouped. Only valid with the \'show-packages\' option.'
+            ),
+            new InputOption(
+                'filter',
+                null,
+                InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
+                'Filter for specific licences.'
+            ),
         ]));
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        if ($input->getOption('grouped') && ! $input->getOption('show-packages')) {
+            throw new \InvalidArgumentException('The option "grouped" is only allowed with "show-packages" option');
+        }
+
         $dependencies = $this->dependencyLoader->loadDependencies(
             $input->getOption('composer'),
             $input->getOption('project-path')
         );
 
+        $dependencies = $this->filterLicenses($dependencies, $input->getOption('filter'));
+
         $groupedByName = $this->groupDependenciesByLicense($dependencies);
 
         $shouldCache = ! $input->getOption('no-cache');
+
         $licenses = $this->lookUpLicenses(array_keys($groupedByName), $output, $shouldCache);
 
         /* @var License $license */
-        $this->outputFormattedLicenses($output, $licenses, $groupedByName);
+        $this->outputFormattedLicenses($output, $input, $licenses, $groupedByName);
 
         return 0;
     }
@@ -70,7 +95,7 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
      * @param  Dependency[]  $dependencies
      * @return array
      */
-    private function groupDependenciesByLicense(array $dependencies)
+    private function groupDependenciesByLicense(array $dependencies): array
     {
         $grouped = [];
 
@@ -86,7 +111,32 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
         return $grouped;
     }
 
-    private function lookUpLicenses(array $licenses, OutputInterface $output, $useCache = true)
+    /**
+     * @param  Dependency[]  $dependencies
+     * @param  string[]  $filters
+     * @return array
+     */
+    private function filterLicenses(array $dependencies, array $filters): array
+    {
+        if ($filters === []) {
+            return $dependencies;
+        }
+
+        $validLicences = [];
+
+        foreach ($dependencies as $dependency) {
+            foreach ($dependency->getLicenses() as $license) {
+                if (in_array(strtolower($license), array_map('strtolower', $filters))) {
+                    $validLicences[] = $dependency;
+                    continue 2;
+                }
+            }
+        }
+
+        return $validLicences;
+    }
+
+    private function lookUpLicenses(array $licenses, OutputInterface $output, $useCache = true): array
     {
         if (! $useCache) {
             $this->licenseLookup->setCache(new NullAdapter);
@@ -103,13 +153,16 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
 
     /**
      * @param  OutputInterface  $output
+     * @param  InputInterface  $input
      * @param  License[]  $licenses
      * @param  array  $groupedByName
      */
-    protected function outputFormattedLicenses(OutputInterface $output, array $licenses, array $groupedByName): void
+    protected function outputFormattedLicenses(OutputInterface $output, InputInterface $input, array $licenses, array $groupedByName): void
     {
         foreach ($licenses as $license) {
-            $usageCount = count($groupedByName[$license->getShortName()]);
+            $dependencies = $groupedByName[$license->getShortName()];
+
+            $usageCount = count($dependencies);
             $headline = sprintf(PHP_EOL.'Count %d - %s (%s)', $usageCount, $license->getShortName(),
                 $license->getSource());
             $output->writeln($headline);
@@ -141,6 +194,36 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
                 ]);
             }
             $licenseTable->render();
+
+            if ($input->getOption('show-packages') || $output->isVerbose()) {
+                $output->writeln('');
+                $output->writeln($this->outputFormatPackages($input, $dependencies));
+            }
         }
+    }
+
+    /**
+     * Generates a output string for the 'show-packages' option.
+     *
+     * @param  InputInterface  $input
+     * @param  array  $dependencies
+     * @return string
+     */
+    protected function outputFormatPackages(InputInterface $input, array $dependencies): string
+    {
+        $packages = [];
+        if ($input->getOption('grouped')) {
+            foreach ($dependencies as $dependency) {
+                $packages[] = $dependency->getName();
+            }
+
+            return 'packages: '.implode(', ', $packages);
+        }
+
+        foreach ($dependencies as $dependency) {
+            $packages[] = sprintf('%s (%s)', $dependency->getName(), $dependency->getVersion());
+        }
+
+        return implode(PHP_EOL, $packages);
     }
 }
