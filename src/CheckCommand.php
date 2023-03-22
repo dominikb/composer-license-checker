@@ -60,10 +60,10 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
                 'Mark a specific license prohibited for usage'
             ),
             new InputOption(
-              'allow',
-              '',
-              InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
-              'Determine a vendor or package to always be allowed and never trigger violations'
+                'allow',
+                '',
+                InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
+                'Determine a vendor or package to always be allowed and never trigger violations'
             ),
         ]));
     }
