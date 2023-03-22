@@ -66,7 +66,7 @@ class ConstraintViolationDetector implements LicenseConstraintHandler
 
         if (count($overlap) > 0) {
             $invalidLicenseConditionals = sprintf('"%s"', implode('", "', $overlap));
-            throw new LogicException("Licenses must not be on the block- and allowlist at the same time: ${invalidLicenseConditionals}");
+            throw new LogicException("Licenses must not be on the block- and allowlist at the same time: {$invalidLicenseConditionals}");
         }
     }
 
