@@ -16,7 +16,7 @@ Please inform yourself in more detail about the licenses you use and do not use 
 You can install the package via composer:
 
 ```bash
-composer require dominikb/composer-license-checker
+composer require --dev dominikb/composer-license-checker
 ```
 
 ## Usage
