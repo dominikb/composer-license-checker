@@ -2,6 +2,15 @@
 
 All notable changes to `composer-license-checker` will be documented in this file
 
+## 2.4.1 - 2023-05-19
+
+### Change
+
+- Use `--dev` flag in documentation for installing the package.
+- Fix deprecation warning ([#24](https://github.com/dominikb/composer-license-checker/pull/24))
+
+Thanks to: [manavo](https://github.com/manavo)
+
 ## 2.4.0 - 2022-04-30
 
 ### Added
