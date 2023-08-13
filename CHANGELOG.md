@@ -2,6 +2,12 @@
 
 All notable changes to `composer-license-checker` will be documented in this file
 
+## 2.4.2 - 2023-08-13
+
+### Change
+
+- Update integration with [tldrlegal](https://www.tldrlegal.com/) to work with their new website.
+
 ## 2.4.1 - 2023-05-19
 
 ### Change
