@@ -135,7 +135,7 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
     /**
      * @param  ConstraintViolation[]  $violations
      *
-     *@throws CommandExecutionException
+     * @throws CommandExecutionException
      */
     private function handleViolations(array $violations): void
     {
