@@ -33,7 +33,7 @@ class LicenseLookupTest extends TestCase
 
         $res = $lookup->lookUp('Apache-2.0');
 
-        $this->assertEquals('https://tldrlegal.com/license/apache-license-2.0-(apache-2.0)', $res->getSource());
+        $this->assertEquals('https://tldrlegal.com/license/apache-license-2-0-apache-2-0', $res->getSource());
     }
 
     /** @test */

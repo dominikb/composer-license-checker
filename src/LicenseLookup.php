@@ -60,7 +60,7 @@ class LicenseLookup implements LicenseLookupContract
             throw new NoLookupPossibleException;
         }
 
-        $searchUrl = sprintf('%s/search?q=%s', static::API_HOST, $licenseShortName);
+        $searchUrl = sprintf('%s/search?query=%s', static::API_HOST, $licenseShortName);
 
         try {
             $response = $this->http->request('get', $searchUrl);
@@ -70,8 +70,8 @@ class LicenseLookup implements LicenseLookupContract
 
         $crawler = $this->makeCrawler($response->getBody()->getContents());
 
-        $headings = $crawler->filter('div#licenses > .search-result > a > h3')->extract(['_text']);
-        $links = $crawler->filter('div#licenses > .search-result > a')->extract(['href']);
+        $headings = $crawler->filter('div.search-result-items .cc-semibold')->extract(['_text']);
+        $links = $crawler->filter('div.search-result-items .c-link-arrow')->extract(['href']);
 
         $zipped = array_map(null, $headings, $links);
 
@@ -115,27 +115,28 @@ class LicenseLookup implements LicenseLookupContract
 
     private function extractCans(Crawler $crawler): array
     {
-        return $this->extractListByColor($crawler, 'green');
+        return $this->extractListByIndex($crawler, 1);
     }
 
     private function extractCannots(Crawler $crawler): array
     {
-        return $this->extractListByColor($crawler, 'red');
+        return $this->extractListByIndex($crawler, 3);
     }
 
     private function extractMusts(Crawler $crawler): array
     {
-        return $this->extractListByColor($crawler, 'blue');
+        return $this->extractListByIndex($crawler, 5);
     }
 
-    private function extractListByColor(Crawler $crawler, $color): array
+    // Index is the offset as children of div.features
+    private function extractListByIndex(Crawler $crawler, $index): array
     {
-        $headings = $crawler->filter(".bucket-list.$color li div.attr-head")
+        $headings = $crawler->filter('div.c-feature:nth-child(' . $index . ') .c-text-md.cc-semibold')
                             ->each(function (Crawler $crawler) {
                                 return $crawler->getNode(0)->textContent;
                             });
 
-        $bodies = $crawler->filter(".bucket-list.$color li div.attr-body")
+        $bodies = $crawler->filter('div.c-feature:nth-child(' . $index . ') .c-text-sm')
                           ->each(function (Crawler $crawler) {
                               return $crawler->getNode(0)->textContent;
                           });
