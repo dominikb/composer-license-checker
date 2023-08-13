@@ -131,12 +131,12 @@ class LicenseLookup implements LicenseLookupContract
     // Index is the offset as children of div.features
     private function extractListByIndex(Crawler $crawler, $index): array
     {
-        $headings = $crawler->filter('div.c-feature:nth-child(' . $index . ') .c-text-md.cc-semibold')
+        $headings = $crawler->filter('div.c-feature:nth-child('.$index.') .c-text-md.cc-semibold')
                             ->each(function (Crawler $crawler) {
                                 return $crawler->getNode(0)->textContent;
                             });
 
-        $bodies = $crawler->filter('div.c-feature:nth-child(' . $index . ') .c-text-sm')
+        $bodies = $crawler->filter('div.c-feature:nth-child('.$index.') .c-text-sm')
                           ->each(function (Crawler $crawler) {
                               return $crawler->getNode(0)->textContent;
                           });
