@@ -2,6 +2,14 @@
 
 All notable changes to `composer-license-checker` will be documented in this file
 
+## 2.4.3 - 2023-10-04
+
+### Change
+
+- Update required composer version to mitigate CVE exposure. ([#29](https://github.com/dominikb/composer-license-checker/pull/29))
+
+Thanks to:  [phansys](https://github.com/phansys)
+
 ## 2.4.2 - 2023-08-13
 
 ### Change
