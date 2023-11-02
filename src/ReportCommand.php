@@ -9,7 +9,6 @@ use Dominikb\ComposerLicenseChecker\Contracts\LicenseLookupAware;
 use Dominikb\ComposerLicenseChecker\Traits\DependencyLoaderAwareTrait;
 use Dominikb\ComposerLicenseChecker\Traits\LicenseLookupAwareTrait;
 use Symfony\Component\Cache\Adapter\NullAdapter;
-use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputDefinition;

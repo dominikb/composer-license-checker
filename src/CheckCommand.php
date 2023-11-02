@@ -9,7 +9,6 @@ use Dominikb\ComposerLicenseChecker\Exceptions\CommandExecutionException;
 use Dominikb\ComposerLicenseChecker\Traits\DependencyLoaderAwareTrait;
 use Dominikb\ComposerLicenseChecker\Traits\LicenseConstraintAwareTrait;
 use Dominikb\ComposerLicenseChecker\Traits\LicenseLookupAwareTrait;
-use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
