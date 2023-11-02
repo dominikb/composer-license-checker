@@ -9,6 +9,7 @@ use Dominikb\ComposerLicenseChecker\Exceptions\CommandExecutionException;
 use Dominikb\ComposerLicenseChecker\Traits\DependencyLoaderAwareTrait;
 use Dominikb\ComposerLicenseChecker\Traits\LicenseConstraintAwareTrait;
 use Dominikb\ComposerLicenseChecker\Traits\LicenseLookupAwareTrait;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
@@ -17,6 +18,10 @@ use Symfony\Component\Console\Logger\ConsoleLogger;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(
+    name: 'check',
+    description: 'Checks the licenses of all dependencies',
+)]
 class CheckCommand extends Command implements LicenseLookupAware, LicenseConstraintAware, DependencyLoaderAware
 {
     use LicenseLookupAwareTrait, LicenseConstraintAwareTrait, DependencyLoaderAwareTrait;
@@ -71,7 +76,7 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
     /**
      * @throws CommandExecutionException
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->logger = new ConsoleLogger($output);
         $this->io = new SymfonyStyle($input, $output);
