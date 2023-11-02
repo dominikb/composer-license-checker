@@ -17,15 +17,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
-#[AsCommand(
-    name: 'report',
-    description: 'Reports the licenses of all dependencies',
-)]
 class ReportCommand extends Command implements LicenseLookupAware, DependencyLoaderAware
 {
     use LicenseLookupAwareTrait, DependencyLoaderAwareTrait;
-
-    protected static $defaultName = 'report';
 
     protected function configure()
     {
@@ -69,6 +63,11 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
                 'Filter for specific licences.'
             ),
         ]));
+    }
+
+    public static function getDefaultName(): ?string
+    {
+        return 'report';
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

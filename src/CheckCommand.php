@@ -18,17 +18,11 @@ use Symfony\Component\Console\Logger\ConsoleLogger;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-#[AsCommand(
-    name: 'check',
-    description: 'Checks the licenses of all dependencies',
-)]
 class CheckCommand extends Command implements LicenseLookupAware, LicenseConstraintAware, DependencyLoaderAware
 {
     use LicenseLookupAwareTrait, LicenseConstraintAwareTrait, DependencyLoaderAwareTrait;
 
     const LINES_BEFORE_DEPENDENCY_VERSIONS = 2;
-
-    protected static $defaultName = 'check';
 
     /** @var ConsoleLogger */
     private $logger;
@@ -71,6 +65,11 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
                 'Determine a vendor or package to always be allowed and never trigger violations'
             ),
         ]));
+    }
+
+    public static function getDefaultName(): ?string
+    {
+        return 'check';
     }
 
     /**
