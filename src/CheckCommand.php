@@ -23,8 +23,6 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
 
     const LINES_BEFORE_DEPENDENCY_VERSIONS = 2;
 
-    protected static $defaultName = 'check';
-
     /** @var ConsoleLogger */
     private $logger;
     /** @var SymfonyStyle */
@@ -68,10 +66,15 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
         ]));
     }
 
+    public static function getDefaultName(): ?string
+    {
+        return 'check';
+    }
+
     /**
      * @throws CommandExecutionException
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $this->logger = new ConsoleLogger($output);
         $this->io = new SymfonyStyle($input, $output);

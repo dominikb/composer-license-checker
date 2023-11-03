@@ -20,8 +20,6 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
 {
     use LicenseLookupAwareTrait, DependencyLoaderAwareTrait;
 
-    protected static $defaultName = 'report';
-
     protected function configure()
     {
         $this->setDefinition(new InputDefinition([
@@ -64,6 +62,11 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
                 'Filter for specific licences.'
             ),
         ]));
+    }
+
+    public static function getDefaultName(): ?string
+    {
+        return 'report';
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
