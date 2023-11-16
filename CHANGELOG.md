@@ -2,6 +2,14 @@
 
 All notable changes to `composer-license-checker` will be documented in this file
 
+## 2.5.0 - 2023-11-16
+
+### Added
+
+- Add support for Symfony 7. ([#32](https://github.com/dominikb/composer-license-checker/pull/32))
+
+Thanks to: [keulinho](https://github.com/keulinho)
+
 ## 2.4.3 - 2023-10-04
 
 ### Change
