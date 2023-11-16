@@ -91,7 +91,7 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
         /* @var License $license */
         $this->outputFormattedLicenses($output, $input, $licenses, $groupedByName);
 
-        return 0;
+        return self::SUCCESS;
     }
 
     /**
