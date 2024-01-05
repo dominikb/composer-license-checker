@@ -30,9 +30,10 @@ class DependencyLoaderTest extends TestCase
         $this->assertEquals('./composerpath/composer-binary licenses -f json -d /some/directory', $command);
     }
 
-    public function createNoOpParser() : DependencyParser
+    public function createNoOpParser(): DependencyParser
     {
-        return new class implements DependencyParser {
+        return new class implements DependencyParser
+        {
             public function parse(string $dependencyOutput): array
             {
                 return [];

@@ -19,6 +19,7 @@ class JSONDependencyParser implements DependencyParserContract
                 ->setVersion($info['version'])
                 ->setLicenses($info['license']);
         }
+
         return $parsed;
     }
 }

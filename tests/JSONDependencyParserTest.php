@@ -2,17 +2,16 @@
 
 declare(strict_types=1);
 
-
 use Dominikb\ComposerLicenseChecker\Dependency;
-use Dominikb\ComposerLicenseChecker\Tests\TestCase;
 use Dominikb\ComposerLicenseChecker\JSONDependencyParser;
+use Dominikb\ComposerLicenseChecker\Tests\TestCase;
 
 class JSONDependencyParserTest extends TestCase
 {
     /** @var \Dominikb\ComposerLicenseChecker\Contracts\DependencyParser */
     private $parser;
 
-    private $STUB = <<<JSON
+    private $STUB = <<<'JSON'
         {
             "name": "dominikb/composer-license-checker",
             "version": "2.5.0",
@@ -36,8 +35,8 @@ class JSONDependencyParserTest extends TestCase
         $output = $this->dependenciesOutput([
             'dominikb/composer-license-checker' => [
                 'version' => '2.5.0',
-                'license' => ['MIT']
-            ]
+                'license' => ['MIT'],
+            ],
         ]);
 
         $this->assertDependencyMatches(
@@ -54,8 +53,8 @@ class JSONDependencyParserTest extends TestCase
         $output = $this->dependenciesOutput([
             'dominikb/composer-license-checker' => [
                 'version' => '2.5.0',
-                'license' => ['MIT']
-            ]
+                'license' => ['MIT'],
+            ],
         ]);
 
         $this->assertDependencyMatches(
@@ -72,8 +71,8 @@ class JSONDependencyParserTest extends TestCase
         $output = $this->dependenciesOutput([
             'dominikb/composer-license-checker' => [
                 'version' => 'dev-test 16af31f',
-                'license' => ['MIT']
-            ]
+                'license' => ['MIT'],
+            ],
         ]);
 
         $this->assertDependencyMatches(
@@ -90,8 +89,8 @@ class JSONDependencyParserTest extends TestCase
         $output = $this->dependenciesOutput([
             'dominikb/composer-license-checker' => [
                 'version' => '2.5',
-                'license' => ['MIT']
-            ]
+                'license' => ['MIT'],
+            ],
         ]);
 
         $this->assertDependencyMatches(
@@ -108,8 +107,8 @@ class JSONDependencyParserTest extends TestCase
         $output = $this->dependenciesOutput([
             'dominikb/composer-license-checker' => [
                 'version' => '2.5',
-                'license' => ['LGPL-2.1-only', 'GPL-3.0-or-later']
-            ]
+                'license' => ['LGPL-2.1-only', 'GPL-3.0-or-later'],
+            ],
         ]);
 
         $this->assertDependencyMatches(
@@ -119,10 +118,10 @@ class JSONDependencyParserTest extends TestCase
             'LGPL-2.1-only',
             'GPL-3.0-or-later'
         );
-
     }
 
-    private function dependenciesOutput(array $dependencies) : string {
+    private function dependenciesOutput(array $dependencies): string
+    {
         return str_replace('<<<DEPENDENCIES>>>', json_encode($dependencies), $this->STUB);
     }
 

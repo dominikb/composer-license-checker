@@ -191,9 +191,9 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
 
             for ($i = 0; $i < $columnWidth; $i++) {
                 $licenseTable->addRow([
-                    'CAN'    => $can[$i],
+                    'CAN' => $can[$i],
                     'CANNOT' => $cannot[$i],
-                    'MUST'   => $must[$i],
+                    'MUST' => $must[$i],
                 ]);
             }
             $licenseTable->render();
