@@ -5,42 +5,32 @@ declare(strict_types=1);
 namespace Dominikb\ComposerLicenseChecker;
 
 use Dominikb\ComposerLicenseChecker\Contracts\DependencyLoader as DependencyLoaderContract;
+use Dominikb\ComposerLicenseChecker\Contracts\DependencyParser;
 
 class DependencyLoader implements DependencyLoaderContract
 {
-    const LINES_BEFORE_DEPENDENCY_VERSIONS = 6;
+    /**
+     * @var DependencyParser
+     */
+    private $dependencyParser;
+
+    public function __construct(DependencyParser $dependencyParser)
+    {
+        $this->dependencyParser = $dependencyParser;
+    }
 
     public function loadDependencies(string $composer, string $project): array
     {
         $commandOutput = $this->runComposerLicenseCommand($composer, $project);
 
-        $cleanOutput = $this->stripHeadersFromOutput($commandOutput);
-
-        return $this->splitColumnsIntoDependencies($cleanOutput);
+        return $this->dependencyParser->parse(join(PHP_EOL, $commandOutput));
     }
 
-    private function runComposerLicenseCommand(string $composer, string $project): array
+    private function runComposerLicenseCommand(string $composer, string $project, string $format = 'json'): array
     {
-        $command = sprintf('%s licenses -d %s', $composer, $project);
+        $command = sprintf('%s licenses -f %s -d %s', $composer, $format, $project);
 
         return $this->exec($command);
-    }
-
-    private function stripHeadersFromOutput(array $output): array
-    {
-        return array_slice($output, self::LINES_BEFORE_DEPENDENCY_VERSIONS);
-    }
-
-    private function splitColumnsIntoDependencies(array $output): array
-    {
-        $parser = new DependencyParser;
-
-        $mappedToObjects = [];
-        foreach ($output as $dependency) {
-            $mappedToObjects[] = $parser->parse($dependency);
-        }
-
-        return $mappedToObjects;
     }
 
     protected function exec(string $command)
