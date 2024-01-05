@@ -2,6 +2,12 @@
 
 All notable changes to `composer-license-checker` will be documented in this file
 
+## 2.5.1 - 2024-01-05
+
+### Changed
+
+- Use JSON format when generating output with `composer licenses` instead of parsing text output. ([#33](https://github.com/dominikb/composer-license-checker/pull/37))
+
 ## 2.5.0 - 2023-11-16
 
 ### Added
