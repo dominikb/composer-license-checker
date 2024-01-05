@@ -8,6 +8,7 @@ use Dominikb\ComposerLicenseChecker\LicenseLookup;
 use Dominikb\ComposerLicenseChecker\ReportCommand;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Dominikb\ComposerLicenseChecker\DependencyLoader;
+use Dominikb\ComposerLicenseChecker\JSONDependencyParser;
 use Dominikb\ComposerLicenseChecker\ConstraintViolationDetector;
 
 function includeIfExists(string $file): bool
@@ -35,11 +36,11 @@ $licenceLookUp = new LicenseLookup($httpClient);
 $checkCommand = new CheckCommand;
 $checkCommand->setLicenseLookup($licenceLookUp);
 $checkCommand->setLicenseConstraintHandler(new ConstraintViolationDetector);
-$checkCommand->setDependencyLoader(new DependencyLoader);
+$checkCommand->setDependencyLoader(new DependencyLoader(new JSONDependencyParser()));
 
 $reportCommand = new ReportCommand;
 $reportCommand->setLicenseLookup($licenceLookUp);
-$reportCommand->setDependencyLoader(new DependencyLoader);
+$reportCommand->setDependencyLoader(new DependencyLoader(new JSONDependencyParser()));
 
 $application = new Application('composer-license-checker', '2.2.0');
 
