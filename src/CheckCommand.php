@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Dominikb\ComposerLicenseChecker;
 
 use Dominikb\ComposerLicenseChecker\Contracts\DependencyLoaderAware;
