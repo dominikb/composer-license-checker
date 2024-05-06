@@ -15,7 +15,6 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Logger\ConsoleLogger;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
@@ -23,10 +22,6 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
 {
     use LicenseLookupAwareTrait, LicenseConstraintAwareTrait, DependencyLoaderAwareTrait;
 
-    const LINES_BEFORE_DEPENDENCY_VERSIONS = 2;
-
-    /** @var ConsoleLogger */
-    private $logger;
     /** @var SymfonyStyle */
     private $io;
 
@@ -78,7 +73,6 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
      */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        $this->logger = new ConsoleLogger($output);
         $this->io = new SymfonyStyle($input, $output);
 
         $this->io->title('Reading through dependencies and checking their licenses ...');
