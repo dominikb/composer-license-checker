@@ -8,7 +8,7 @@ use Dominikb\ComposerLicenseChecker\Contracts\LicenseLookup;
 
 trait LicenseLookupAwareTrait
 {
-    /** @var LicenseLookup */
+    /** @var LicenseLookup|null */
     protected $licenseLookup;
 
     public function setLicenseLookup(LicenseLookup $licenseLookup): void

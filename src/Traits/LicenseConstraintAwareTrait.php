@@ -8,7 +8,7 @@ use Dominikb\ComposerLicenseChecker\Contracts\LicenseConstraintHandler;
 
 trait LicenseConstraintAwareTrait
 {
-    /** @var LicenseConstraintHandler */
+    /** @var LicenseConstraintHandler|null */
     protected $licenseConstraintHandler;
 
     public function setLicenseConstraintHandler(LicenseConstraintHandler $handler): void
