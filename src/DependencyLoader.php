@@ -26,9 +26,9 @@ class DependencyLoader implements DependencyLoaderContract
         return $this->dependencyParser->parse(join(PHP_EOL, $commandOutput));
     }
 
-    private function runComposerLicenseCommand(string $composer, string $project, string $format = 'json'): array
+    private function runComposerLicenseCommand(string $composer, string $project): array
     {
-        $command = sprintf('%s licenses -f %s -d %s', $composer, $format, $project);
+        $command = sprintf('%s licenses --format json --working-dir %s', escapeshellarg($composer), escapeshellarg($project));
 
         return $this->exec($command);
     }
