@@ -8,7 +8,7 @@ use Dominikb\ComposerLicenseChecker\Contracts\DependencyLoader;
 
 trait DependencyLoaderAwareTrait
 {
-    /** @var DependencyLoader */
+    /** @var DependencyLoader|null */
     protected $dependencyLoader;
 
     public function setDependencyLoader(DependencyLoader $loader): void
