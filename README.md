@@ -36,6 +36,14 @@ Use `./composer-license-checker help` to get info about general usage or use the
 vendor/bin/composer-license-checker report -p /path/to/your/project -c /path/to/composer.phar
 ```
 
+### Exit codes
+
+Any command returns with one of these exit codes:
+
+- 0: Ok
+- 1: Offending licenses found in check, or a problem occurred when creating a report
+- 2: Internal error when executing the command, may indicate problems calling Composer internally
+
 ### Testing
 
 ``` bash

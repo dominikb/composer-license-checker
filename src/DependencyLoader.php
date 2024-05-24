@@ -6,6 +6,8 @@ namespace Dominikb\ComposerLicenseChecker;
 
 use Dominikb\ComposerLicenseChecker\Contracts\DependencyLoader as DependencyLoaderContract;
 use Dominikb\ComposerLicenseChecker\Contracts\DependencyParser;
+use Dominikb\ComposerLicenseChecker\Exceptions\CommandExecutionException;
+use Symfony\Component\Console\Command\Command;
 
 class DependencyLoader implements DependencyLoaderContract
 {
@@ -19,6 +21,9 @@ class DependencyLoader implements DependencyLoaderContract
         $this->dependencyParser = $dependencyParser;
     }
 
+    /**
+     * @throws CommandExecutionException
+     */
     public function loadDependencies(string $composer, string $project): array
     {
         $commandOutput = $this->runComposerLicenseCommand($composer, $project);
@@ -26,16 +31,26 @@ class DependencyLoader implements DependencyLoaderContract
         return $this->dependencyParser->parse(join(PHP_EOL, $commandOutput));
     }
 
-    private function runComposerLicenseCommand(string $composer, string $project, string $format = 'json'): array
+    /**
+     * @throws CommandExecutionException
+     */
+    private function runComposerLicenseCommand(string $composer, string $project): array
     {
-        $command = sprintf('%s licenses -f %s -d %s', $composer, $format, $project);
+        $command = sprintf('%s licenses --format json --working-dir %s', escapeshellarg($composer), escapeshellarg($project));
 
         return $this->exec($command);
     }
 
-    protected function exec(string $command)
+    /**
+     * @throws CommandExecutionException
+     */
+    protected function exec(string $command): array
     {
-        exec($command, $output);
+        exec($command, $output, $exitCode);
+
+        if ($exitCode !== 0) {
+            throw new CommandExecutionException('Error when trying to fetch licenses from Composer', Command::INVALID);
+        }
 
         return $output;
     }
