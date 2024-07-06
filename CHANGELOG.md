@@ -2,6 +2,19 @@
 
 All notable changes to `composer-license-checker` will be documented in this file
 
+## 2.6.0 2024-07-06
+
+### Added
+
+- Add documentation on exit codes to expect from any `composer-license-checker` command. ([#41](https://github.com/dominikb/composer-license-checker/pull/41))
+- Verify the exist code of the internal call to `composer licenses` to determine if the command was successful. ([#41](https://github.com/dominikb/composer-license-checker/pull/41))
+
+### Changed
+
+- Improve type documentation and clean up `composer.json` configuration. ([#40](https://github.com/dominikb/composer-license-checker/pull/40)) 
+
+Thanks to: [SvenRtbg](https://github.com/SvenRtbg)
+
 ## 2.5.1 - 2024-01-05
 
 ### Changed
