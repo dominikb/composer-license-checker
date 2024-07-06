@@ -15,7 +15,7 @@ class DependencyLoaderTest extends TestCase
     /**
      * @test
      *
-     * @requires OSFAMILY Linux|Darwin
+     * @requires OS Linux|Darwin
      * Linux required because of escape characters in the verified command
      */
     public function it_runs_the_command_with_the_given_inputs()
