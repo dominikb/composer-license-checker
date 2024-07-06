@@ -6,11 +6,18 @@ namespace Dominikb\ComposerLicenseChecker\Tests;
 
 use Dominikb\ComposerLicenseChecker\Contracts\DependencyParser;
 use Dominikb\ComposerLicenseChecker\DependencyLoader;
+use Dominikb\ComposerLicenseChecker\Exceptions\CommandExecutionException;
 use Mockery;
+use Symfony\Component\Console\Command\Command;
 
 class DependencyLoaderTest extends TestCase
 {
-    /** @test */
+    /**
+     * @test
+     *
+     * @requires OS Linux|Darwin
+     * Linux required because of escape characters in the verified command
+     */
     public function it_runs_the_command_with_the_given_inputs()
     {
         $loader = Mockery::mock(DependencyLoader::class, [$this->createNoOpParser()])
@@ -18,16 +25,33 @@ class DependencyLoaderTest extends TestCase
 
         $command = '';
         $loader->shouldAllowMockingProtectedMethods()
-               ->shouldReceive('exec')
-               ->once()
+               ->expects('exec')
                ->withArgs(function ($c) use (&$command) {
                    return (bool) ($command = $c);
                })
-               ->andReturn([]);
+               ->andReturns([]);
 
         $loader->loadDependencies('./composerpath/composer-binary', '/some/directory');
 
-        $this->assertEquals('./composerpath/composer-binary licenses -f json -d /some/directory', $command);
+        $this->assertEquals("'./composerpath/composer-binary' licenses --format json --working-dir '/some/directory'", $command);
+    }
+
+    /**
+     * @test
+     */
+    public function it_throws_on_exec_failure()
+    {
+        $loader = Mockery::mock(DependencyLoader::class, [$this->createNoOpParser()])
+            ->makePartial();
+
+        $command = '';
+        $loader->shouldAllowMockingProtectedMethods()
+            ->expects('exec')
+            ->andThrows(CommandExecutionException::class, 'Error when trying to fetch licenses from Composer', Command::INVALID);
+
+        $this->expectException(CommandExecutionException::class);
+        $this->expectExceptionCode(2);
+        $loader->loadDependencies('./composerpath/composer-binary', '/some/directory');
     }
 
     public function createNoOpParser(): DependencyParser
