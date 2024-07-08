@@ -40,7 +40,7 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
                 'c',
                 InputOption::VALUE_OPTIONAL,
                 'Path to composer executable',
-                realpath('./vendor/bin/composer')
+                'composer'
             ),
             new InputOption(
                 'allowlist',

@@ -35,7 +35,7 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
                 'c',
                 InputOption::VALUE_OPTIONAL,
                 'Path to composer executable',
-                realpath('./vendor/bin/composer')
+                'composer'
             ),
             new InputOption(
                 'no-cache',
