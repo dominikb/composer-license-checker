@@ -36,6 +36,15 @@ Use `./composer-license-checker help` to get info about general usage or use the
 vendor/bin/composer-license-checker report -p /path/to/your/project -c /path/to/composer.phar
 ```
 
+### Path to composer
+
+By default, this tool assumes that "composer" is in your path and a valid command that will call Composer.
+
+If that isn't the case, add the `-c` or `--composer` option with the path where to find Composer instead.
+This tool comes with Composer installed as a dependency, so you may start with `--composer ./vendor/bin/composer`, given that you are in this tool's root directory when executing a license check.
+
+If this tool cannot find Composer, it will exit with status code 2, see below.
+
 ### Exit codes
 
 Any command returns with one of these exit codes:
