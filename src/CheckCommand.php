@@ -160,7 +160,7 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
     {
         $byLicense = [];
         foreach ($violators as $violator) {
-            $license = $violator->getLicenses()[0];
+            $license = empty($violator->getLicenses()) ? 'Unknown' : $violator->getLicenses()[0];
 
             if (! isset($byLicense[$license])) {
                 $byLicense[$license] = [];
