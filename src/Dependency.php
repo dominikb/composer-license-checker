@@ -22,9 +22,9 @@ class Dependency
     /**
      * Dependency constructor.
      *
-     * @param string $name
-     * @param string $version
-     * @param string[] $licenses
+     * @param  string  $name
+     * @param  string  $version
+     * @param  string[]  $licenses
      */
     public function __construct(string $name = '', string $version = '', array $licenses = [])
     {
@@ -42,7 +42,7 @@ class Dependency
     }
 
     /**
-     * @param string $name
+     * @param  string  $name
      */
     public function setName(string $name): self
     {
@@ -60,7 +60,7 @@ class Dependency
     }
 
     /**
-     * @param string $version
+     * @param  string  $version
      */
     public function setVersion(string $version): self
     {
@@ -71,7 +71,7 @@ class Dependency
 
     public function hasAnyLicense(): bool
     {
-        return !empty($this->licenses);
+        return ! empty($this->licenses);
     }
 
     /**
@@ -79,14 +79,15 @@ class Dependency
      */
     public function getLicenses(): array
     {
-        if ($this->hasAnyLicense())
+        if ($this->hasAnyLicense()) {
             return $this->licenses;
-        else
+        } else {
             return self::NO_LICENSES;
+        }
     }
 
     /**
-     * @param string[] $licenses
+     * @param  string[]  $licenses
      */
     public function setLicenses(array $licenses): self
     {
