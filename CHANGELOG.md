@@ -2,6 +2,12 @@
 
 All notable changes to `composer-license-checker` will be documented in this file
 
+## Unreleased
+
+### Changed
+
+- Dependencies without a specified license will now be grouped under the license `none`. Those dependencies can be allowed/blocked by specifying the `none` license in either list. ([#45](https://github.com/dominikb/composer-license-checker/pull/45))
+
 ## 2.6.0 2024-07-06
 
 ### Added

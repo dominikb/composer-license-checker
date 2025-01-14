@@ -27,7 +27,7 @@ Two separate commands are provided:
 
 Use `./composer-license-checker help` to get info about general usage or use the syntax `./composer-license-checker help COMMAND_NAME` to see more information about a specific command available. 
 
-``` bash
+```bash
 ./vendor/bin/composer-license-checker check \
         --allowlist MIT \ # Fail if anything but MIT license is used
         --blocklist GPL \ # Fail if any dependency uses GPL
@@ -52,6 +52,33 @@ Any command returns with one of these exit codes:
 - 0: Ok
 - 1: Offending licenses found in check, or a problem occurred when creating a report
 - 2: Internal error when executing the command, may indicate problems calling Composer internally
+
+### Dependencies without a license
+
+Some dependencies might not have a license specified in their `composer.json`.
+Those will be grouped under the license `none`.
+
+```bash
+# Reporting a dependency without a license will look like this
+./composer-license-checker report --show-packages
+
+#  Count 1 - none (-)
+#  +-----+---------+------+
+#  | CAN | CAN NOT | MUST |
+#  +-----+---------+------+
+#
+#  packages: somepackage/without-a-license
+```
+
+You can add the imagined license `none` to your allowlist or blocklist to handle those dependencies.
+
+```bash
+# Allow dependencies without a license
+./composer-license-checker check --allowlist none
+
+# Disallow dependencies without a license
+./composer-license-checker check --allowlist GPL --blocklist none
+```
 
 ### Testing
 
