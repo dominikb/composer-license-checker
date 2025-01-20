@@ -31,9 +31,33 @@ class DependencyLoaderTest extends TestCase
                })
                ->andReturns([]);
 
-        $loader->loadDependencies('./composerpath/composer-binary', '/some/directory');
+        $loader->loadDependencies('./composerpath/composer-binary', '/some/directory', false);
 
         $this->assertEquals("'./composerpath/composer-binary' licenses --format json --working-dir '/some/directory'", $command);
+    }
+
+        /**
+     * @test
+     *
+     * @requires OS Linux|Darwin
+     * Linux required because of escape characters in the verified command
+     */
+    public function it_runs_the_command_with_the_given_inputs_without_dev()
+    {
+        $loader = Mockery::mock(DependencyLoader::class, [$this->createNoOpParser()])
+                         ->makePartial();
+
+        $command = '';
+        $loader->shouldAllowMockingProtectedMethods()
+               ->expects('exec')
+               ->withArgs(function ($c) use (&$command) {
+                   return (bool) ($command = $c);
+               })
+               ->andReturns([]);
+
+        $loader->loadDependencies('./composerpath/composer-binary', '/some/directory', true);
+
+        $this->assertEquals("'./composerpath/composer-binary' licenses --no-dev --format json --working-dir '/some/directory'", $command);
     }
 
     /**
@@ -44,14 +68,13 @@ class DependencyLoaderTest extends TestCase
         $loader = Mockery::mock(DependencyLoader::class, [$this->createNoOpParser()])
             ->makePartial();
 
-        $command = '';
         $loader->shouldAllowMockingProtectedMethods()
             ->expects('exec')
             ->andThrows(CommandExecutionException::class, 'Error when trying to fetch licenses from Composer', Command::INVALID);
 
         $this->expectException(CommandExecutionException::class);
         $this->expectExceptionCode(2);
-        $loader->loadDependencies('./composerpath/composer-binary', '/some/directory');
+        $loader->loadDependencies('./composerpath/composer-binary', '/some/directory', false);
     }
 
     public function createNoOpParser(): DependencyParser
