@@ -28,6 +28,7 @@
     },
     "require-dev": {
         "mockery/mockery": "^1.3.3",
+        "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^9.3",
         "symfony/var-dumper": "^4.2 || ^5.2 || ^6.0 || ^7.0"
     },
@@ -46,7 +47,8 @@
     },
     "scripts": {
         "test": "vendor/bin/phpunit",
-        "test-coverage": "vendor/bin/phpunit --coverage-clover build/logs/coverage.xml"
+        "test-coverage": "vendor/bin/phpunit --coverage-clover build/logs/coverage.xml",
+        "phpstan": "vendor/bin/phpstan analyze"
     },
     "config": {
         "sort-packages": true
