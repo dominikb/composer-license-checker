@@ -36,7 +36,7 @@ class DependencyLoaderTest extends TestCase
         $this->assertEquals("'./composerpath/composer-binary' licenses --format json --working-dir '/some/directory'", $command);
     }
 
-        /**
+    /**
      * @test
      *
      * @requires OS Linux|Darwin

@@ -36,7 +36,7 @@ class DependencyLoader implements DependencyLoaderContract
      */
     private function runComposerLicenseCommand(string $composer, string $project, bool $withoutDev): array
     {
-        $command = sprintf('%s licenses%s --format json --working-dir %s', escapeshellarg($composer), $withoutDev ? ' --no-dev' : '' ,  escapeshellarg($project));
+        $command = sprintf('%s licenses%s --format json --working-dir %s', escapeshellarg($composer), $withoutDev ? ' --no-dev' : '',  escapeshellarg($project));
 
         return $this->exec($command);
     }
