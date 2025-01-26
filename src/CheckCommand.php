@@ -43,6 +43,13 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
                 'composer'
             ),
             new InputOption(
+                'no-dev',
+                null,
+                InputOption::VALUE_OPTIONAL,
+                'Do not include dev dependencies',
+                'false'
+            ),
+            new InputOption(
                 'allowlist',
                 'a',
                 InputOption::VALUE_IS_ARRAY | InputOption::VALUE_OPTIONAL,
@@ -81,7 +88,8 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
 
         $dependencies = $this->dependencyLoader->loadDependencies(
             $input->getOption('composer'),
-            $input->getOption('project-path')
+            $input->getOption('project-path'),
+            ($input->getOption('no-dev') ?? 'true') === 'true'
         );
 
         $this->io->writeln(count($dependencies).' dependencies were found ...');
