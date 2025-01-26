@@ -4,11 +4,19 @@ All notable changes to `composer-license-checker` will be documented in this fil
 
 ## Unreleased
 
+## 2.7.0 - 2024-01-26
+
+### Added
+
+- Add option for `--no-dev` flag to ignore dev-only dependencies when checking licenses. ([#48](https://github.com/dominikb/composer-license-checker/pull/48))
+
 ### Changed
 
 - Dependencies without a specified license will now be grouped under the license `none`. Those dependencies can be allowed/blocked by specifying the `none` license in either list. ([#45](https://github.com/dominikb/composer-license-checker/pull/45))
 
-## 2.6.0 2024-07-06
+Thanks to: [ildyria](https://github.com/ildyria) and [tourze](https://github.com/tourze)
+
+## 2.6.0 - 2024-07-06
 
 ### Added
 
