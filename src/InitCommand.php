@@ -1,16 +1,16 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker;
 
+use Dominikb\ComposerLicenseChecker\Traits\DependencyLoaderAwareTrait;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputOption;
-use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputDefinition;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Dominikb\ComposerLicenseChecker\Traits\DependencyLoaderAwareTrait;
 
 class InitCommand extends Command
 {
@@ -66,7 +66,7 @@ class InitCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title('Generating list of all licenses used in the project...');
 
-        if ( ! $this->canWriteToOutfile($input, $io)) {
+        if (! $this->canWriteToOutfile($input, $io)) {
             return Command::FAILURE;
         }
 
@@ -76,22 +76,22 @@ class InitCommand extends Command
             ($input->getOption('no-dev') ?? 'true') === 'true'
         );
 
-        $output = join(PHP_EOL, $this->extractLicenses($dependencies)) . PHP_EOL;
+        $output = join(PHP_EOL, $this->extractLicenses($dependencies)).PHP_EOL;
         $io->block($output);
 
-        if (!file_put_contents($input->getOption('output'), $output)) {
-            $io->error("Failed to write to '" . $input->getOption('output') . "'.");
+        if (! file_put_contents($input->getOption('output'), $output)) {
+            $io->error("Failed to write to '".$input->getOption('output')."'.");
+
             return Command::FAILURE;
         }
 
-        $io->success("List of used licenses written to '" . $input->getOption('output') . "'.");
+        $io->success("List of used licenses written to '".$input->getOption('output')."'.");
 
         return Command::SUCCESS;
     }
 
     /**
-     * @param Dependency[] $dependencies
-     *
+     * @param  Dependency[]  $dependencies
      * @return string[]
      */
     private function extractLicenses(array $dependencies): array
@@ -108,9 +108,8 @@ class InitCommand extends Command
     }
 
     /**
-     * @param InputInterface $input
-     * @param SymfonyStyle   $io
-     *
+     * @param  InputInterface  $input
+     * @param  SymfonyStyle  $io
      * @return bool
      */
     protected function canWriteToOutfile(InputInterface $input, SymfonyStyle $io): bool
@@ -119,11 +118,11 @@ class InitCommand extends Command
             return true;
         }
 
-        if ( ! file_exists($input->getOption('output'))) {
+        if (! file_exists($input->getOption('output'))) {
             return true;
         }
 
-        $io->warning("File " . $input->getOption('output') . " already exists.");
+        $io->warning('File '.$input->getOption('output').' already exists.');
 
         return $io->confirm('Overwrite existing allowlist?', false);
     }

@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker;
 
@@ -92,7 +92,7 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
             ($input->getOption('no-dev') ?? 'true') === 'true'
         );
 
-        $this->io->writeln(count($dependencies) . ' dependencies were found ...');
+        $this->io->writeln(count($dependencies).' dependencies were found ...');
         $this->io->newLine();
 
         $violations = $this->determineViolations($dependencies,
@@ -118,11 +118,11 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
      */
     private function ensureCommandCanBeExecuted(): void
     {
-        if ( ! $this->licenseLookup) {
+        if (! $this->licenseLookup) {
             throw new CommandExecutionException('LicenseLookup must be set via setLicenseLookup() before the command can be executed!');
         }
 
-        if ( ! $this->dependencyLoader) {
+        if (! $this->dependencyLoader) {
             throw new CommandExecutionException('DependencyLoader must be set via setDependencyLoader() before the command can be executed!');
         }
     }
@@ -131,7 +131,9 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
     {
         $out = [];
         foreach ($licenses as $license) {
-            if (strlen($license) <= 0) continue; // Ignore empty string
+            if (strlen($license) <= 0) {
+                continue;
+            } // Ignore empty string
 
             // Suppress warnings about missing files. Simple file_exists checking would not work for URIs.
             if ($contents = @file($license, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)) {
@@ -157,7 +159,7 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
     }
 
     /**
-     * @param ConstraintViolation[] $violations
+     * @param  ConstraintViolation[]  $violations
      *
      * @throws CommandExecutionException
      */
@@ -179,14 +181,14 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
     }
 
     /**
-     * @param Dependency[] $violators
+     * @param  Dependency[]  $violators
      */
     private function reportViolators(array $violators): void
     {
         $byLicense = [];
         foreach ($violators as $violator) {
             foreach ($violator->getLicenses() as $license) {
-                if ( ! isset($byLicense[$license])) {
+                if (! isset($byLicense[$license])) {
                     $byLicense[$license] = [];
                 }
                 $byLicense[$license][] = $violator;
