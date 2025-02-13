@@ -20,7 +20,7 @@ if (! function_exists('array_map_keys')) {
     }
 }
 
-if (!function_exists('array_flatten')) {
+if (! function_exists('array_flatten')) {
     /**
      * @param  array  $array
      * @return array

@@ -2,15 +2,15 @@
 
 namespace Dominikb\ComposerLicenseChecker\Tests;
 
+use Dominikb\ComposerLicenseChecker\CheckCommand;
+use Dominikb\ComposerLicenseChecker\ConstraintViolationDetector;
+use Dominikb\ComposerLicenseChecker\Contracts\DependencyLoader;
+use Dominikb\ComposerLicenseChecker\Dependency;
 use Mockery;
-use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
-use Dominikb\ComposerLicenseChecker\Dependency;
-use Dominikb\ComposerLicenseChecker\CheckCommand;
 use Symfony\Component\Console\Output\BufferedOutput;
-use Dominikb\ComposerLicenseChecker\Contracts\DependencyLoader;
-use Dominikb\ComposerLicenseChecker\ConstraintViolationDetector;
+use Symfony\Component\Filesystem\Path;
 
 class CheckCommandTest extends TestCase
 {
@@ -36,14 +36,12 @@ class CheckCommandTest extends TestCase
         $this->output = new BufferedOutput;
     }
 
-
     /** @test */
     public function it_fails_when_a_dependency_has_a_disallowed_license()
     {
         $this->dependencyLoader
             ->allows('loadDependencies')
-            ->andReturn([new Dependency('some-dependency', '1.0', ['DISALLOWED'])])
-        ;
+            ->andReturn([new Dependency('some-dependency', '1.0', ['DISALLOWED'])]);
 
         $input = new ArrayInput([
             '--composer' => 'path/to/composer',
@@ -63,8 +61,7 @@ class CheckCommandTest extends TestCase
             ->andReturn([
                 new Dependency('some-dependency', '4.20', ['MIT']),
                 new Dependency('other-dependency', '6.9', ['Apache-2.0']),
-            ])
-        ;
+            ]);
 
         $input = new ArrayInput([
             '--composer' => 'path/to/composer',
@@ -80,8 +77,7 @@ class CheckCommandTest extends TestCase
     {
         $this->dependencyLoader
             ->allows('loadDependencies')
-            ->andReturn([new Dependency('some-dependency', '1.0', ['DISALLOWED_LICENSE'])])
-        ;
+            ->andReturn([new Dependency('some-dependency', '1.0', ['DISALLOWED_LICENSE'])]);
 
         $input = new ArrayInput([
             '--composer' => 'path/to/composer',
