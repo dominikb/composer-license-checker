@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker;
 
-use Symfony\Component\Console\Attribute\AsCommand;
 use Dominikb\ComposerLicenseChecker\Contracts\DependencyLoaderAware;
 use Dominikb\ComposerLicenseChecker\Contracts\LicenseLookupAware;
 use Dominikb\ComposerLicenseChecker\Traits\DependencyLoaderAwareTrait;
