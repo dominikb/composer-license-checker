@@ -27,7 +27,7 @@ class LicenseLookup implements LicenseLookupContract
         'proprietary',
     ];
 
-    public function __construct(ClientInterface $http, CacheInterface $cache = null)
+    public function __construct(ClientInterface $http, ?CacheInterface $cache = null)
     {
         $this->http = $http;
         $this->cache = $cache ?? new FilesystemAdapter('FilesystemCache', 3600, __DIR__.'/../.cache');
