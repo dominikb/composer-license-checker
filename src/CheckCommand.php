@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dominikb\ComposerLicenseChecker;
 
 use Dominikb\ComposerLicenseChecker\Contracts\DependencyLoaderAware;
+use Dominikb\ComposerLicenseChecker\Contracts\LicenseSourceContract;
 use Dominikb\ComposerLicenseChecker\Contracts\LicenseConstraintAware;
 use Dominikb\ComposerLicenseChecker\Contracts\LicenseLookupAware;
 use Dominikb\ComposerLicenseChecker\Exceptions\CommandExecutionException;
@@ -96,8 +97,8 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
         $this->io->newLine();
 
         $violations = $this->determineViolations($dependencies,
-            $input->getOption('blocklist'),
-            $input->getOption('allowlist'),
+            $this->resolveLicenses($input->getOption('blocklist')),
+            $this->resolveLicenses($input->getOption('allowlist')),
             $input->getOption('allow')
         );
 
@@ -125,6 +126,20 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
         if (! $this->dependencyLoader) {
             throw new CommandExecutionException('DependencyLoader must be set via setDependencyLoader() before the command can be executed!');
         }
+    }
+
+    private function resolveLicenses(array $licenses): array
+    {
+        $out = [];
+        foreach($licenses as $license) {
+            if (file_exists($license) &&
+                $contents = file($license, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)) {
+                $out = array_merge($out, $contents);
+            } else {
+                $out[] = $license;
+            }
+        }
+        return $out;
     }
 
     private function determineViolations(array $dependencies, array $blocklist, array $allowlist, array $allowed): array
