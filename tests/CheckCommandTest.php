@@ -10,7 +10,6 @@ use Mockery;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
-use Symfony\Component\Filesystem\Path;
 
 class CheckCommandTest extends TestCase
 {
