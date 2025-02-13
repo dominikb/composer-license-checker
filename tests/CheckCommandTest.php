@@ -65,7 +65,7 @@ class CheckCommandTest extends TestCase
 
         $input = new ArrayInput([
             '--composer' => 'path/to/composer',
-            '--allowlist' => [Path::join(__DIR__, 'allowlist.txt'), 'MIT'],
+            '--allowlist' => [join(DIRECTORY_SEPARATOR, [__DIR__, 'allowlist.txt']), 'MIT'],
         ], $this->command->getDefinition());
 
         $result = $this->command->execute($input, $this->output);
@@ -81,7 +81,7 @@ class CheckCommandTest extends TestCase
 
         $input = new ArrayInput([
             '--composer' => 'path/to/composer',
-            '--blocklist' => [Path::join(__DIR__, 'blocklist.txt')],
+            '--blocklist' => [join(DIRECTORY_SEPARATOR, [__DIR__, 'blocklist.txt'])],
         ], $this->command->getDefinition());
 
         $result = $this->command->execute($input, $this->output);
