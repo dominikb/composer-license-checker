@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker;
 
+use Symfony\Component\Console\Attribute\AsCommand;
 use Dominikb\ComposerLicenseChecker\Contracts\DependencyLoaderAware;
 use Dominikb\ComposerLicenseChecker\Contracts\LicenseLookupAware;
 use Dominikb\ComposerLicenseChecker\Traits\DependencyLoaderAwareTrait;
@@ -74,6 +75,11 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
     public static function getDefaultName(): ?string
     {
         return 'report';
+    }
+
+    public static function getDefaultDescription(): ?string
+    {
+        return 'Generate a report of all licenses used in the project';
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

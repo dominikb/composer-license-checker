@@ -61,6 +61,11 @@ class InitCommand extends Command
         return 'init';
     }
 
+    public static function getDefaultDescription(): ?string
+    {
+        return 'Generate a list of all licenses used in the project';
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);

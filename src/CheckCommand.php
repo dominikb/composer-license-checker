@@ -75,6 +75,11 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
         return 'check';
     }
 
+    public static function getDefaultDescription(): ?string
+    {
+        return 'Check the licenses of all dependencies and fail on violations';
+    }
+
     /**
      * @throws CommandExecutionException
      */
