@@ -22,10 +22,8 @@ class CheckCommandTest extends TestCase
     /** @var BufferedOutput */
     protected $output;
 
-    public function __construct()
+    protected function setUp(): void
     {
-        parent::__construct();
-
         $this->command = new CheckCommand;
         $this->licenseLookup = Mockery::mock(\Dominikb\ComposerLicenseChecker\Contracts\LicenseLookup::class);
         $this->dependencyLoader = Mockery::mock(DependencyLoader::class);
@@ -34,6 +32,7 @@ class CheckCommandTest extends TestCase
         $this->command->setLicenseConstraintHandler(new ConstraintViolationDetector);
         $this->output = new BufferedOutput;
     }
+
 
     /** @test */
     public function it_fails_when_a_dependency_has_a_disallowed_license()
