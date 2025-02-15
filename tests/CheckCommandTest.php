@@ -33,7 +33,6 @@ class CheckCommandTest extends TestCase
         $this->output = new BufferedOutput;
     }
 
-
     /** @test */
     public function it_fails_when_a_dependency_has_a_disallowed_license()
     {
