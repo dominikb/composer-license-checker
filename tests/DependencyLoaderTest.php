@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\RequiresOperatingSystem;
 use Dominikb\ComposerLicenseChecker\Contracts\DependencyParser;
 use Dominikb\ComposerLicenseChecker\DependencyLoader;
+use PHPUnit\Framework\Attributes\RequiresOperatingSystemFamily;
 use Dominikb\ComposerLicenseChecker\Exceptions\CommandExecutionException;
 use Mockery;
 use Symfony\Component\Console\Command\Command;
@@ -13,11 +16,10 @@ use Symfony\Component\Console\Command\Command;
 class DependencyLoaderTest extends TestCase
 {
     /**
-     * @test
-     *
-     * @requires OS Linux|Darwin
      * Linux required because of escape characters in the verified command
      */
+    #[Test]
+    #[RequiresOperatingSystem('Linux|Darwin')]
     public function it_runs_the_command_with_the_given_inputs()
     {
         $loader = Mockery::mock(DependencyLoader::class, [$this->createNoOpParser()])
@@ -37,11 +39,10 @@ class DependencyLoaderTest extends TestCase
     }
 
     /**
-     * @test
-     *
-     * @requires OS Linux|Darwin
      * Linux required because of escape characters in the verified command
      */
+    #[Test]
+    #[RequiresOperatingSystem('Linux|Darwin')]
     public function it_runs_the_command_with_the_given_inputs_without_dev()
     {
         $loader = Mockery::mock(DependencyLoader::class, [$this->createNoOpParser()])
@@ -60,9 +61,7 @@ class DependencyLoaderTest extends TestCase
         $this->assertEquals("'./composerpath/composer-binary' licenses --no-dev --format json --working-dir '/some/directory'", $command);
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function it_throws_on_exec_failure()
     {
         $loader = Mockery::mock(DependencyLoader::class, [$this->createNoOpParser()])

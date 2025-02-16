@@ -2,6 +2,7 @@
 
 namespace Dominikb\ComposerLicenseChecker\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
 use Dominikb\ComposerLicenseChecker\CheckCommand;
 use Dominikb\ComposerLicenseChecker\ConstraintViolationDetector;
 use Dominikb\ComposerLicenseChecker\Contracts\DependencyLoader;
@@ -33,7 +34,8 @@ class CheckCommandTest extends TestCase
         $this->output = new BufferedOutput;
     }
 
-    /** @test */
+
+    #[Test]
     public function it_fails_when_a_dependency_has_a_disallowed_license()
     {
         $this->dependencyLoader
@@ -50,7 +52,7 @@ class CheckCommandTest extends TestCase
         $this->assertSame(Command::FAILURE, $result);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_allow_licenses_specified_in_a_file()
     {
         $this->dependencyLoader
@@ -69,7 +71,7 @@ class CheckCommandTest extends TestCase
         $this->assertSame(Command::SUCCESS, $result);
     }
 
-    /** @test */
+    #[Test]
     public function it_can_block_licenses_specified_in_a_file()
     {
         $this->dependencyLoader

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use PHPUnit\Framework\Attributes\Test;
 use Dominikb\ComposerLicenseChecker\Dependency;
 use Dominikb\ComposerLicenseChecker\JSONDependencyParser;
 use Dominikb\ComposerLicenseChecker\Tests\TestCase;
@@ -29,7 +30,7 @@ class JSONDependencyParserTest extends TestCase
         $this->parser = new JSONDependencyParser();
     }
 
-    /** @test */
+    #[Test]
     public function it_parses_a_simple_dependency()
     {
         $output = $this->dependenciesOutput([
@@ -47,7 +48,7 @@ class JSONDependencyParserTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_parses_versions_without_the_prefix()
     {
         $output = $this->dependenciesOutput([
@@ -65,7 +66,7 @@ class JSONDependencyParserTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_handles_dependencies_on_branches()
     {
         $output = $this->dependenciesOutput([
@@ -83,7 +84,7 @@ class JSONDependencyParserTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_parses_a_version_without_a_patch_number()
     {
         $output = $this->dependenciesOutput([
@@ -101,7 +102,7 @@ class JSONDependencyParserTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function it_parses_multiple_licenses_per_dependency()
     {
         $output = $this->dependenciesOutput([

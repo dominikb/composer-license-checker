@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
 use Dominikb\ComposerLicenseChecker\ConstraintViolation;
 use Dominikb\ComposerLicenseChecker\ConstraintViolationDetector;
 use Dominikb\ComposerLicenseChecker\Dependency;
@@ -21,7 +22,7 @@ class ConstraintViolationDetectorTest extends TestCase
         $this->detector = new ConstraintViolationDetector;
     }
 
-    /** @test */
+    #[Test]
     public function it_throws_a_logic_exception_given_an_overlap_between_block_and_allowlist()
     {
         $this->detector->setAllowlist(['MIT', 'other-license']);
@@ -31,7 +32,7 @@ class ConstraintViolationDetectorTest extends TestCase
         $this->detector->detectViolations([]);
     }
 
-    /** @test */
+    #[Test]
     public function given_a_single_license_on_the_blocklist_it_detects_a_violation()
     {
         $this->detector->setBlocklist(['MIT']);
@@ -43,7 +44,7 @@ class ConstraintViolationDetectorTest extends TestCase
         $this->assertViolationFound($violations);
     }
 
-    /** @test */
+    #[Test]
     public function given_a_subset_of_blocklisted_licenses_no_violation_is_detected()
     {
         $this->detector->setBlocklist(['MIT']);
@@ -55,7 +56,7 @@ class ConstraintViolationDetectorTest extends TestCase
         $this->assertViolationNotFound($violations);
     }
 
-    /** @test */
+    #[Test]
     public function given_a_non_allow_listed_license_a_violation_is_detected()
     {
         $this->detector->setAllowlist(['MIT']);
@@ -67,7 +68,7 @@ class ConstraintViolationDetectorTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function given_at_least_one_allowlisted_license_no_violation_is_detected()
     {
         $this->detector->setAllowlist(['MIT']);
@@ -79,7 +80,7 @@ class ConstraintViolationDetectorTest extends TestCase
         );
     }
 
-    /** @test */
+    #[Test]
     public function given_an_allowed_package_its_license_does_not_trigger_a_violation()
     {
         $dependency = new Dependency('dominikb/composer-license-checker', '2.1.0', ['MIT']);
@@ -90,7 +91,7 @@ class ConstraintViolationDetectorTest extends TestCase
         $this->assertViolationNotFound($this->detector->detectViolations([$dependency]));
     }
 
-    /** @test */
+    #[Test]
     public function given_an_allowed_package_author_non_of_its_dependencies_trigger_a_violation()
     {
         $this->detector->allow(new Dependency('dominikb'));
