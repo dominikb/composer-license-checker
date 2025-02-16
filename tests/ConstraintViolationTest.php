@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker\Tests;
 
-use PHPUnit\Framework\Attributes\Test;
 use Dominikb\ComposerLicenseChecker\ConstraintViolation;
 use Dominikb\ComposerLicenseChecker\Dependency;
+use PHPUnit\Framework\Attributes\Test;
 
 class ConstraintViolationTest extends TestCase
 {

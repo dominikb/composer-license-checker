@@ -2,8 +2,8 @@
 
 namespace Dominikb\ComposerLicenseChecker\Tests;
 
-use PHPUnit\Framework\Attributes\Test;
 use Dominikb\ComposerLicenseChecker\Dependency;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 class DependencyTest extends TestCase

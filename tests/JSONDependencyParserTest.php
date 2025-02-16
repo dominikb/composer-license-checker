@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-use PHPUnit\Framework\Attributes\Test;
 use Dominikb\ComposerLicenseChecker\Dependency;
 use Dominikb\ComposerLicenseChecker\JSONDependencyParser;
 use Dominikb\ComposerLicenseChecker\Tests\TestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 class JSONDependencyParserTest extends TestCase
 {

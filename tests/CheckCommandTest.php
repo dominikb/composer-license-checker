@@ -2,12 +2,12 @@
 
 namespace Dominikb\ComposerLicenseChecker\Tests;
 
-use PHPUnit\Framework\Attributes\Test;
 use Dominikb\ComposerLicenseChecker\CheckCommand;
 use Dominikb\ComposerLicenseChecker\ConstraintViolationDetector;
 use Dominikb\ComposerLicenseChecker\Contracts\DependencyLoader;
 use Dominikb\ComposerLicenseChecker\Dependency;
 use Mockery;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
@@ -33,7 +33,6 @@ class CheckCommandTest extends TestCase
         $this->command->setLicenseConstraintHandler(new ConstraintViolationDetector);
         $this->output = new BufferedOutput;
     }
-
 
     #[Test]
     public function it_fails_when_a_dependency_has_a_disallowed_license()

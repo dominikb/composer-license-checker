@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Dominikb\ComposerLicenseChecker\Tests;
 
 use DateTime;
-use PHPUnit\Framework\Attributes\Test;
 use Dominikb\ComposerLicenseChecker\License;
+use PHPUnit\Framework\Attributes\Test;
 
 class LicenseTest extends TestCase
 {

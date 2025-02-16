@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker\Tests;
 
-use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\Attributes\RequiresOperatingSystem;
 use Dominikb\ComposerLicenseChecker\Contracts\DependencyParser;
 use Dominikb\ComposerLicenseChecker\DependencyLoader;
-use PHPUnit\Framework\Attributes\RequiresOperatingSystemFamily;
 use Dominikb\ComposerLicenseChecker\Exceptions\CommandExecutionException;
 use Mockery;
+use PHPUnit\Framework\Attributes\RequiresOperatingSystem;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\Console\Command\Command;
 
 class DependencyLoaderTest extends TestCase
 {
     /**
-     * Linux required because of escape characters in the verified command
+     * Linux required because of escape characters in the verified command.
      */
     #[Test]
     #[RequiresOperatingSystem('Linux|Darwin')]
@@ -39,7 +38,7 @@ class DependencyLoaderTest extends TestCase
     }
 
     /**
-     * Linux required because of escape characters in the verified command
+     * Linux required because of escape characters in the verified command.
      */
     #[Test]
     #[RequiresOperatingSystem('Linux|Darwin')]

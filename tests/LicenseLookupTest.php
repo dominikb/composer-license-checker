@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker\Tests;
 
-use PHPUnit\Framework\Attributes\Test;
 use Dominikb\ComposerLicenseChecker\License;
 use Dominikb\ComposerLicenseChecker\LicenseLookup;
 use Dominikb\ComposerLicenseChecker\NoLookupLicenses;
@@ -12,6 +11,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\Cache\Adapter\NullAdapter;
 
 class LicenseLookupTest extends TestCase
