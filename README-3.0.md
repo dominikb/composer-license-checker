@@ -1,9 +1,6 @@
 # Composer License Checker
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/dominikb/composer-license-checker.svg?style=flat-square)](https://packagist.org/packages/dominikb/composer-license-checker)
-[![Build Status](https://img.shields.io/github/workflow/status/dominikb/composer-license-checker/run-tests?style=flat-square)]()
-[![Quality Score](https://img.shields.io/scrutinizer/g/dominikb/composer-license-checker.svg?style=flat-square)](https://scrutinizer-ci.com/g/dominikb/composer-license-checker)
-[![Scrutinizer coverage](https://img.shields.io/scrutinizer/coverage/g/dominikb/composer-license-checker.svg?style=flat-square)](https://scrutinizer-ci.com/g/dominikb/composer-license-checker)
 [![Total Downloads](https://img.shields.io/packagist/dt/dominikb/composer-license-checker.svg?style=flat-square)](https://packagist.org/packages/dominikb/composer-license-checker)
 
 Quickly scan your dependencies, see what licenses they use or check in your CI that no unwanted licenses were merged.
@@ -21,19 +18,31 @@ composer require --dev dominikb/composer-license-checker
 
 ## Usage
 
-Two separate commands are provided:
-* `./composer-license-checker check`
-* `./composer-license-checker report`
+These commands are available:
+- `./composer-license-checker report` - Create a report of all dependencies and their licenses
+- `./composer-license-checker init` - Generate an `allowlist.txt` with all licenses found in your dependencies
+- `./composer-license-checker check` - Check if any dependency violates your allowlist or blocklist
 
 Use `./composer-license-checker help` to get info about general usage or use the syntax `./composer-license-checker help COMMAND_NAME` to see more information about a specific command available. 
 
 ```bash
+./vendor/bin/composer-license-checker report -p /path/to/your/project -c /path/to/composer.phar
+
 ./vendor/bin/composer-license-checker check \
+        --allowlist allowlist.txt \ # Use the generated allowlist
         --allowlist MIT \ # Fail if anything but MIT license is used
         --blocklist GPL \ # Fail if any dependency uses GPL
         --allow dominikb/composer-license-checker # Always allow this dependency regardless of its license
+```
 
-vendor/bin/composer-license-checker report -p /path/to/your/project -c /path/to/composer.phar
+#### Shared allowlist/blocklist
+
+When using a filesource for your allowlist or blocklist you can also fetch them from a URI.
+
+```bash
+# Using a publicly available allowlist
+./composer-license-checker check \
+  --allowlist https://gist.githubusercontent.com/dominikb/671874857463bb08bab094edde20b8ca/raw/d415a9f96d9101205054e685eb61674393214b3f/allowlist.txt
 ```
 
 ### Path to composer
