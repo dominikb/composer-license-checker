@@ -18,6 +18,11 @@ checks:
         fix_doc_comments: true
 
 build:
+    # https://prinsfrank.nl/2022/02/04/Configuring-PHP8.1-on-scrutinizer
+    image: default-bionic
+    environment:
+        php:
+            version: 8.4.4
     nodes:
         analysis:
             tests:
