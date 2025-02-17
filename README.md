@@ -1,9 +1,6 @@
 # Composer License Checker
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/dominikb/composer-license-checker.svg?style=flat-square)](https://packagist.org/packages/dominikb/composer-license-checker)
-[![Build Status](https://img.shields.io/github/workflow/status/dominikb/composer-license-checker/run-tests?style=flat-square)]()
-[![Quality Score](https://img.shields.io/scrutinizer/g/dominikb/composer-license-checker.svg?style=flat-square)](https://scrutinizer-ci.com/g/dominikb/composer-license-checker)
-[![Scrutinizer coverage](https://img.shields.io/scrutinizer/coverage/g/dominikb/composer-license-checker.svg?style=flat-square)](https://scrutinizer-ci.com/g/dominikb/composer-license-checker)
 [![Total Downloads](https://img.shields.io/packagist/dt/dominikb/composer-license-checker.svg?style=flat-square)](https://packagist.org/packages/dominikb/composer-license-checker)
 
 Quickly scan your dependencies, see what licenses they use or check in your CI that no unwanted licenses were merged.
