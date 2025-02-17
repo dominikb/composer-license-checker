@@ -2,7 +2,28 @@
 
 All notable changes to `composer-license-checker` will be documented in this file
 
-## Unreleased
+## Unreleased (3.0.0)
+
+The major version was increased because of upgrades to the minimum required PHP version and other packages.
+
+In practise, this upgrade should not require any changes on your end.
+
+### Added
+
+- Support for PHP 8.4. ([#49](https://github.com/dominikb/composer-license-checker/pull/49)
+- Allow files for `--allowlist` and `--blocklist` to be passed as arguments. ([#51](https://github.com/dominikb/composer-license-checker/pull/51))
+- Add `init` command to create a `.allowed-licenses` file for currently installed dependencies. ([#51](https://github.com/dominikb/composer-license-checker/pull/51))
+
+### Changed
+
+- Increase minimum required versions of `guzzlehttp/guzzle` to `7.4.5`
+- Increase minimum required versions of `symfony/css-selector` and `symfony/dom-crawler` to major version `6` or `7`
+
+### Removed
+
+- Dropped support for PHP 7 and PHP 8.0 [(see: supported versions)](https://www.php.net/supported-versions.php)
+
+Thanks to: [Atesca](https://github.com/Atesca)
 
 ## 2.7.0 - 2024-01-26
 
