@@ -76,6 +76,11 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
         return 'report';
     }
 
+    public static function getDefaultDescription(): ?string
+    {
+        return 'Generate a report of all licenses used in the project';
+    }
+
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if ($input->getOption('grouped') && ! $input->getOption('show-packages')) {

@@ -19,3 +19,20 @@ if (! function_exists('array_map_keys')) {
         return $output;
     }
 }
+
+if (! function_exists('array_flatten')) {
+    /**
+     * @param  array  $array
+     * @return array
+     */
+    function array_flatten($array): array
+    {
+        $return = [];
+
+        array_walk_recursive($array, function ($x) use (&$return) {
+            $return[] = $x;
+        });
+
+        return $return;
+    }
+}

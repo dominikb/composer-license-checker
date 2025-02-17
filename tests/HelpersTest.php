@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Dominikb\ComposerLicenseChecker\Tests;
 
+use PHPUnit\Framework\Attributes\Test;
+
 class HelpersTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function the_callback_gets_called_with_keys_and_values()
     {
         $array = ['key' => 'value'];

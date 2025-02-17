@@ -75,6 +75,11 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
         return 'check';
     }
 
+    public static function getDefaultDescription(): ?string
+    {
+        return 'Check the licenses of all dependencies and fail on violations';
+    }
+
     /**
      * @throws CommandExecutionException
      */
@@ -96,8 +101,8 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
         $this->io->newLine();
 
         $violations = $this->determineViolations($dependencies,
-            $input->getOption('blocklist'),
-            $input->getOption('allowlist'),
+            $this->resolveLicenses($input->getOption('blocklist')),
+            $this->resolveLicenses($input->getOption('allowlist')),
             $input->getOption('allow')
         );
 
@@ -125,6 +130,25 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
         if (! $this->dependencyLoader) {
             throw new CommandExecutionException('DependencyLoader must be set via setDependencyLoader() before the command can be executed!');
         }
+    }
+
+    private function resolveLicenses(array $licenses): array
+    {
+        $out = [];
+        foreach ($licenses as $license) {
+            if (strlen($license) <= 0) {
+                continue;
+            } // Ignore empty string
+
+            // Suppress warnings about missing files. Simple file_exists checking would not work for URIs.
+            if ($contents = @file($license, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)) {
+                $out = array_merge($out, $contents);
+            } else {
+                $out[] = $license;
+            }
+        }
+
+        return $out;
     }
 
     private function determineViolations(array $dependencies, array $blocklist, array $allowlist, array $allowed): array

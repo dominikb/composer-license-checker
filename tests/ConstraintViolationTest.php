@@ -6,10 +6,11 @@ namespace Dominikb\ComposerLicenseChecker\Tests;
 
 use Dominikb\ComposerLicenseChecker\ConstraintViolation;
 use Dominikb\ComposerLicenseChecker\Dependency;
+use PHPUnit\Framework\Attributes\Test;
 
 class ConstraintViolationTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function getters_return_the_instance_values()
     {
         $violation = new ConstraintViolation('title');

@@ -3,6 +3,7 @@
 
 use GuzzleHttp\Client;
 use Symfony\Component\Console\Application;
+use Dominikb\ComposerLicenseChecker\InitCommand;
 use Dominikb\ComposerLicenseChecker\CheckCommand;
 use Dominikb\ComposerLicenseChecker\LicenseLookup;
 use Dominikb\ComposerLicenseChecker\ReportCommand;
@@ -42,8 +43,11 @@ $reportCommand = new ReportCommand;
 $reportCommand->setLicenseLookup($licenceLookUp);
 $reportCommand->setDependencyLoader(new DependencyLoader(new JSONDependencyParser()));
 
+$initCommand = new InitCommand;
+$initCommand->setDependencyLoader(new DependencyLoader(new JSONDependencyParser()));
+
 $application = new Application('composer-license-checker', '2.7.0');
 
-$application->addCommands([$checkCommand, $reportCommand]);
+$application->addCommands([$checkCommand, $reportCommand, $initCommand]);
 
 $application->run();

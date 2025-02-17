@@ -6,10 +6,11 @@ namespace Dominikb\ComposerLicenseChecker\Tests;
 
 use DateTime;
 use Dominikb\ComposerLicenseChecker\License;
+use PHPUnit\Framework\Attributes\Test;
 
 class LicenseTest extends TestCase
 {
-    /** @test */
+    #[Test]
     public function getters_return_the_values_of_instance_properties()
     {
         $license = (new License('shortName'))

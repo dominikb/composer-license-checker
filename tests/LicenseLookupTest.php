@@ -11,6 +11,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\Cache\Adapter\NullAdapter;
 
 class LicenseLookupTest extends TestCase
@@ -18,9 +19,8 @@ class LicenseLookupTest extends TestCase
     /**
      * When looking up the Apache-2.0 license we actually do not want the first result.
      * This test asserts, that not necessarily the first link will be followed up on.
-     *
-     * @test
      */
+    #[Test]
     public function it_fuzzy_matches_the_best_link_to_detail_pages()
     {
         $handler = new MockHandler([
@@ -36,7 +36,7 @@ class LicenseLookupTest extends TestCase
         $this->assertEquals('https://tldrlegal.com/license/apache-license-2-0-apache-2-0', $res->getSource());
     }
 
-    /** @test */
+    #[Test]
     public function given_invalid_license_names_empty_license_objects_get_returned()
     {
         $handler = new MockHandler([]);
@@ -53,7 +53,7 @@ class LicenseLookupTest extends TestCase
         $this->assertSame('-', $resultForProprietary->getSource());
     }
 
-    /** @test */
+    #[Test]
     public function given_an_error_when_looking_up_detail_information_it_returns_a_no_lookup_license()
     {
         $handler = new MockHandler([
@@ -68,7 +68,7 @@ class LicenseLookupTest extends TestCase
         $this->assertInstanceOf(NoLookupLicenses::class, $license);
     }
 
-    /** @test */
+    #[Test]
     public function given_an_error_when_searching_for_a_details_page_it_returns_a_no_lookup_license()
     {
         $handler = new MockHandler([
