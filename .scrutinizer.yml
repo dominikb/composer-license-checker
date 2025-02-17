@@ -22,7 +22,7 @@ build:
     image: default-bionic
     environment:
         php:
-            version: 8.4.4
+            version: 8.1
     nodes:
         analysis:
             tests:
