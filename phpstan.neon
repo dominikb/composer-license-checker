@@ -1,6 +1,6 @@
 parameters:
     treatPhpDocTypesAsCertain: false
-    level: 6
+    level: 5
     reportMaybesInPropertyPhpDocTypes: false
     featureToggles:
         bleedingEdge: true
