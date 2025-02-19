@@ -16,9 +16,9 @@ class CheckCommandTest extends TestCase
 {
     /** @var CheckCommand */
     protected $command;
-    /** @var Mockery\MockInterface */
+    /** @var Mockery\MockInterface|Mockery\LegacyMockInterface */
     protected $licenseLookup;
-    /** @var Mockery\MockInterface */
+    /** @var Mockery\MockInterface|Mockery\LegacyMockInterface */
     protected $dependencyLoader;
     /** @var BufferedOutput */
     protected $output;

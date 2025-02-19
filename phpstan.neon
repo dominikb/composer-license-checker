@@ -9,7 +9,7 @@ parameters:
         - tests
     ignoreErrors:
         - 
-            message: '#Call to an undefined method Mockery\\(LegacyMockInterface|Mock)::(expects|loadDependencies)\(\).#'
+            message: '#Call to an undefined method Mockery\\.*::(expects|loadDependencies|andThrows|allows)\(\).#'
             path: 'tests'
         -
             message: '#Parameter \#1 \$licenseLookup of method Dominikb\\ComposerLicenseChecker\\CheckCommand::setLicenseLookup\(\) expects Dominikb\\ComposerLicenseChecker\\Contracts\\LicenseLookup, Mockery\\(MockInterface|LegacyMockInterface) given\.#'
