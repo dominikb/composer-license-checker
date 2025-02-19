@@ -15,9 +15,9 @@ class ConstraintViolationDetectorTest extends TestCase
     /** @var ConstraintViolationDetector */
     private $detector;
 
-    public function __construct($name = null, array $data = [], $dataName = '')
+    protected function setup(): void
     {
-        parent::__construct($name, $data, $dataName);
+        parent::setup();
 
         $this->detector = new ConstraintViolationDetector;
     }

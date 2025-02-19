@@ -25,6 +25,8 @@ class CheckCommandTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->command = new CheckCommand;
         $this->licenseLookup = Mockery::mock(\Dominikb\ComposerLicenseChecker\Contracts\LicenseLookup::class);
         $this->dependencyLoader = Mockery::mock(DependencyLoader::class);

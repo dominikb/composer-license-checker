@@ -1,0 +1,13 @@
+parameters:
+    treatPhpDocTypesAsCertain: false
+    level: 5
+    reportMaybesInPropertyPhpDocTypes: false
+    featureToggles:
+        bleedingEdge: true
+    paths:
+        - src
+        - tests
+    ignoreErrors:
+        - 
+            message: '#Call to an undefined method Mockery\\LegacyMockInterface::(expects|loadDependencies)\(\).#'
+            path: 'tests'
