@@ -1,6 +1,6 @@
 parameters:
     treatPhpDocTypesAsCertain: false
-    level: 5
+    level: 6
     reportMaybesInPropertyPhpDocTypes: false
     featureToggles:
         bleedingEdge: true
@@ -10,4 +10,10 @@ parameters:
     ignoreErrors:
         - 
             message: '#Call to an undefined method Mockery\\LegacyMockInterface::(expects|loadDependencies)\(\).#'
+            path: 'tests'
+        -
+            message: '#Parameter \#1 \$licenseLookup of method Dominikb\\ComposerLicenseChecker\\CheckCommand::setLicenseLookup\(\) expects Dominikb\\ComposerLicenseChecker\\Contracts\\LicenseLookup, Mockery\\MockInterface given\.#'
+            path: 'tests'
+        -
+            message: '#Parameter \#1 \$loader of method Dominikb\\ComposerLicenseChecker\\CheckCommand::setDependencyLoader\(\) expects Dominikb\\ComposerLicenseChecker\\Contracts\\DependencyLoader, Mockery\\MockInterface given\.#'
             path: 'tests'
