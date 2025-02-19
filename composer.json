@@ -8,6 +8,7 @@
     "homepage": "https://github.com/dominikb/composer-license-checker",
     "license": "MIT",
     "type": "library",
+    "version": "2.7.0",
     "authors": [
         {
             "name": "Dominik Bauernfeind",
@@ -28,6 +29,7 @@
     },
     "require-dev": {
         "mockery/mockery": "^1.3.6",
+        "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^10.0 || ^11.0",
         "symfony/var-dumper": "^6.0 || ^7.0"
     },
@@ -46,8 +48,9 @@
     },
     "scripts": {
         "test": "vendor/bin/phpunit",
-        "test-coverage": "vendor/bin/phpunit --coverage-clover build/logs/coverage.xml",
-        "test-ci": "vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover --coverage-filter src"
+        "test-coverage": "vendor/bin/phpunit --coverage-clover build/logs/coverage.xml  --coverage-filter src",
+        "test-ci": "vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover --coverage-filter src",
+        "phpstan": "vendor/bin/phpstan analyze"
     },
     "config": {
         "sort-packages": true

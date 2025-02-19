@@ -6,3 +6,5 @@ coverage
 .idea
 .cache
 .phpunit.result.cache
+coverage.clover
+.phpunit.cache

@@ -14,9 +14,6 @@
             <directory>tests</directory>
         </testsuite>
     </testsuites>
-    <coverage>
-        <include>
-            <directory suffix=".php">src/</directory>
-        </include>
+    <coverage pathCoverage="true">
     </coverage>
 </phpunit>

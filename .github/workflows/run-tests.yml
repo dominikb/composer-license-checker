@@ -32,5 +32,8 @@ jobs:
             - name: Install dependencies
               run: composer update --${{ matrix.stability }} --prefer-dist --no-interaction
 
+            - name: Run PHPStan
+              run: vendor/bin/phpstan analyze
+              
             - name: Execute tests
               run: composer test-ci

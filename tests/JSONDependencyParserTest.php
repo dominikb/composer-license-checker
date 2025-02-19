@@ -23,9 +23,9 @@ class JSONDependencyParserTest extends TestCase
         }
         JSON;
 
-    public function __construct($name = null, array $data = [], $dataName = '')
+    protected function setup(): void
     {
-        parent::__construct($name, $data, $dataName);
+        parent::setup();
 
         $this->parser = new JSONDependencyParser();
     }
