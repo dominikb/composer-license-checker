@@ -12,12 +12,11 @@ use PHPUnit\Framework\Attributes\Test;
 
 class ConstraintViolationDetectorTest extends TestCase
 {
-    /** @var ConstraintViolationDetector */
-    private $detector;
+    private ConstraintViolationDetector $detector;
 
-    public function __construct($name = null, array $data = [], $dataName = '')
+    protected function setUp(): void
     {
-        parent::__construct($name, $data, $dataName);
+        parent::setUp();
 
         $this->detector = new ConstraintViolationDetector;
     }

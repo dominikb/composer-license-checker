@@ -20,7 +20,7 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
 {
     use LicenseLookupAwareTrait, DependencyLoaderAwareTrait;
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDefinition(new InputDefinition([
             new InputOption(

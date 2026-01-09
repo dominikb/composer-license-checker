@@ -16,7 +16,7 @@ class InitCommand extends Command
 {
     use DependencyLoaderAwareTrait;
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDefinition(new InputDefinition([
             new InputOption(

@@ -25,7 +25,7 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
     /** @var SymfonyStyle */
     private $io;
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDefinition(new InputDefinition([
             new InputOption(
