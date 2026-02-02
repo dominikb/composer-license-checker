@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Dominikb\ComposerLicenseChecker;
 
 use Dominikb\ComposerLicenseChecker\Traits\DependencyLoaderAwareTrait;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
@@ -12,6 +13,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(name: 'init', description: 'Generate a list of all licenses used in the project')]
 class InitCommand extends Command
 {
     use DependencyLoaderAwareTrait;
@@ -54,16 +56,6 @@ class InitCommand extends Command
                 'Ignore any existing allowlist file and potentially overwrite it with new content',
             ),
         ]));
-    }
-
-    public static function getDefaultName(): ?string
-    {
-        return 'init';
-    }
-
-    public static function getDefaultDescription(): ?string
-    {
-        return 'Generate a list of all licenses used in the project';
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
