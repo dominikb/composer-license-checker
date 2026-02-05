@@ -11,6 +11,7 @@ use Dominikb\ComposerLicenseChecker\Exceptions\CommandExecutionException;
 use Dominikb\ComposerLicenseChecker\Traits\DependencyLoaderAwareTrait;
 use Dominikb\ComposerLicenseChecker\Traits\LicenseConstraintAwareTrait;
 use Dominikb\ComposerLicenseChecker\Traits\LicenseLookupAwareTrait;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
@@ -18,6 +19,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
+#[AsCommand(name: 'check', description: 'Check the licenses of all dependencies and fail on violations')]
 class CheckCommand extends Command implements LicenseLookupAware, LicenseConstraintAware, DependencyLoaderAware
 {
     use LicenseLookupAwareTrait, LicenseConstraintAwareTrait, DependencyLoaderAwareTrait;
@@ -25,7 +27,7 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
     /** @var SymfonyStyle */
     private $io;
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDefinition(new InputDefinition([
             new InputOption(
@@ -68,16 +70,6 @@ class CheckCommand extends Command implements LicenseLookupAware, LicenseConstra
                 'Determine a vendor or package to always be allowed and never trigger violations'
             ),
         ]));
-    }
-
-    public static function getDefaultName(): ?string
-    {
-        return 'check';
-    }
-
-    public static function getDefaultDescription(): ?string
-    {
-        return 'Check the licenses of all dependencies and fail on violations';
     }
 
     /**
