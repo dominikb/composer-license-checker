@@ -9,6 +9,7 @@ use Dominikb\ComposerLicenseChecker\Contracts\LicenseLookupAware;
 use Dominikb\ComposerLicenseChecker\Traits\DependencyLoaderAwareTrait;
 use Dominikb\ComposerLicenseChecker\Traits\LicenseLookupAwareTrait;
 use Symfony\Component\Cache\Adapter\NullAdapter;
+use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -16,11 +17,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
+#[AsCommand(name: 'report', description: 'Generate a report of all licenses used in the project')]
 class ReportCommand extends Command implements LicenseLookupAware, DependencyLoaderAware
 {
     use LicenseLookupAwareTrait, DependencyLoaderAwareTrait;
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDefinition(new InputDefinition([
             new InputOption(
@@ -69,16 +71,6 @@ class ReportCommand extends Command implements LicenseLookupAware, DependencyLoa
                 'Filter for specific licences.'
             ),
         ]));
-    }
-
-    public static function getDefaultName(): ?string
-    {
-        return 'report';
-    }
-
-    public static function getDefaultDescription(): ?string
-    {
-        return 'Generate a report of all licenses used in the project';
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int

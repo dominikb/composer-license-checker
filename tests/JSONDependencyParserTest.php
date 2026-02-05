@@ -9,10 +9,9 @@ use PHPUnit\Framework\Attributes\Test;
 
 class JSONDependencyParserTest extends TestCase
 {
-    /** @var \Dominikb\ComposerLicenseChecker\Contracts\DependencyParser */
-    private $parser;
+    private JSONDependencyParser $parser;
 
-    private $STUB = <<<'JSON'
+    private string $STUB = <<<'JSON'
         {
             "name": "dominikb/composer-license-checker",
             "version": "2.5.0",
@@ -23,9 +22,9 @@ class JSONDependencyParserTest extends TestCase
         }
         JSON;
 
-    public function __construct($name = null, array $data = [], $dataName = '')
+    protected function setUp(): void
     {
-        parent::__construct($name, $data, $dataName);
+        parent::setUp();
 
         $this->parser = new JSONDependencyParser();
     }
