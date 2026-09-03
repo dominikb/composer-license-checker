@@ -63,7 +63,7 @@ class LicenseLookup implements LicenseLookupContract
         $searchUrl = sprintf('%s/search?query=%s', static::API_HOST, $licenseShortName);
 
         try {
-            $response = $this->http->request('get', $searchUrl);
+            $response = $this->http->request('GET', $searchUrl);
         } catch (GuzzleException $exception) {
             throw new NoLookupPossibleException($exception->getMessage(), $exception->getCode(), $exception);
         }
@@ -95,7 +95,7 @@ class LicenseLookup implements LicenseLookupContract
     private function resolveLicenseInformation(string $licenseShortName, string $detailsPageUrl): License
     {
         try {
-            $response = $this->http->request('get', $detailsPageUrl);
+            $response = $this->http->request('GET', $detailsPageUrl);
             $pageContent = $response->getBody()->getContents();
 
             $crawler = $this->makeCrawler($pageContent);

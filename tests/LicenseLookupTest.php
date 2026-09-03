@@ -36,6 +36,25 @@ class LicenseLookupTest extends TestCase
         $this->assertEquals('https://tldrlegal.com/license/apache-license-2-0-apache-2-0', $res->getSource());
     }
 
+    /**
+     * Guzzle 7 silently upper-cased the HTTP method, Guzzle 8 sends it as given.
+     * A lowercase method reaches tldrlegal verbatim and is answered with a 400,
+     * which lookUp() would swallow into a NoLookupLicenses.
+     */
+    #[Test]
+    public function it_requests_license_information_with_an_uppercase_http_method()
+    {
+        $handler = new MockHandler([
+            new Response(200, [], fopen(__DIR__.'/apache-2.0-search.html', 'r')),
+            new Response(),
+        ]);
+        $client = new Client(['handler' => HandlerStack::create($handler)]);
+
+        (new LicenseLookup($client, new NullAdapter))->lookUp('Apache-2.0');
+
+        $this->assertSame('GET', $handler->getLastRequest()->getMethod());
+    }
+
     #[Test]
     public function given_invalid_license_names_empty_license_objects_get_returned()
     {
